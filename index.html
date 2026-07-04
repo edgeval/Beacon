@@ -18,7 +18,6 @@
         @media (prefers-color-scheme: dark) {
             body { background: linear-gradient(135deg, #0b0f19 0%, #111827 100%); }
         }
-        /* 🔒 字体防护：阻止 Tailwind v4 Preflight 后发覆盖 Font Awesome 字形与 900 核心字重 */
         .fa-solid, .fas, .fa-brands, .fab, i[class*="fa-"] {
             font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
             font-weight: 900 !important;
@@ -40,6 +39,11 @@
         .gpu-slide {
             transition: transform 1.2s ease-in-out, opacity 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
             will-change: transform;
+        }
+        /* 🛡️ 10/10 黄金毕业版：禁止链接拖拽破坏布局，同时完美保留长按复制与原生呼出菜单能力 */
+        a {
+            -webkit-user-drag: none;
+            -webkit-touch-callout: default;
         }
     </style>
 </head>
@@ -73,7 +77,7 @@
                     等待 data 加载
                 </p>
 
-                <a id="default-entry-btn" href="#" target="_blank" class="w-full bg-white dark:bg-gray-100 text-purple-700 dark:text-purple-900 py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg hover:bg-purple-50 transition-all active:scale-[0.99] flex items-center justify-center gap-2 pointer-events-none opacity-80">
+                <a id="default-entry-btn" href="#" target="_blank" draggable="false" class="w-full bg-white dark:bg-gray-100 text-purple-700 dark:text-purple-900 py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 pointer-events-none opacity-80">
                     <span id="i18n-btn-enter">等待配置</span> 
                     <i class="fa-solid fa-arrow-right text-sm"></i>
                 </a>
@@ -84,7 +88,7 @@
                     <span class="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                         <i class="fa-solid fa-list-ol"></i> <span id="i18n-list-title">全部线路</span>
                     </span>
-                    <button id="retest-btn" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center gap-1 transition-colors px-2 py-1 rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-950/50 pointer-events-none opacity-50">
+                    <button id="retest-btn" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 transition-colors px-2 py-1 rounded-md pointer-events-none opacity-50">
                         <i id="retest-icon" class="fa-solid fa-arrows-rotate"></i> <span id="i18n-btn-retest">重新测速</span>
                     </button>
                 </div>
@@ -111,7 +115,6 @@
     <script src="./engine.js"></script>
 
     <script>
-        // 🔒 防误入自毁
         (function() {
             if (location.hostname.includes('127.0.0.1') || location.hostname.includes('localhost') || location.protocol === 'file:' || location.protocol === 'content:') return;
             if (location.protocol === 'http:') {
@@ -132,7 +135,6 @@
         const _v = Symbol('AlgorithmicScore'); 
         const isAvailable = (ms) => ms !== undefined && ms < Number.MAX_SAFE_INTEGER;
 
-        // 🌟 JIT 安全静态颜色映射表：保证 Tailwind 运行时能够捕获和应用正确的类名
         const PILL_COLOR_MAP = {
             emerald: "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400",
             teal: "bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400",
@@ -174,20 +176,20 @@
         const ROW_HEIGHT = 52; 
         let testResults = [];
 
-        // 🌟 配置化升级：动态渲染底部信息卡区
+        // 🌟 10/10 黄金毕业版：无hover零悬停、防拖拽、正则拆分、主题解耦
         function renderInfoCards() {
             const infoContainer = document.getElementById('info-cards-container');
             if (!infoContainer) return;
             infoContainer.innerHTML = '';
 
-            // 安全兼容回退机制：若新版配置项缺失，使用原两张标准卡片回退
             const cards = APP_CONFIG.infoCards || [
                 { iconClass: "fa-solid fa-globe", title: { zh: "海外访问地址", en: "Global Access" }, value: APP_CONFIG.globalUrl || "暂无", color: "blue" },
                 { iconClass: "fa-solid fa-bookmark", title: { zh: "永久收藏地址", en: "Bookmark" }, value: APP_CONFIG.bookmarkUrl || "暂无", color: "red" }
             ];
 
+            const linkColor = APP_THEME.linkColor || "text-indigo-600 dark:text-indigo-400";
+
             cards.forEach((card, idx) => {
-                // 动态插入间隔分割线
                 if (idx > 0) {
                     const divider = document.createElement('div');
                     divider.className = "border-t border-gray-100/80 dark:border-gray-800 my-1";
@@ -197,19 +199,25 @@
                 const iconColor = ICON_COLOR_MAP[card.color] || ICON_COLOR_MAP.blue;
                 const titleText = card.title ? (card.title[langKey] || card.title.zh || "") : "";
                 const valueText = card.value || "暂无";
-                
-                // 支持直接传入 iconClass，或通过旧方式组合 icon 字段
                 const iconFullClass = card.iconClass || `fa-solid ${card.icon || 'fa-globe'}`;
 
+                const isLink = 
+                    /^https?:\/\//i.test(valueText) || 
+                    /^mailto:/i.test(valueText);
+
+                const valueHtml = isLink
+                    ? `<a href="${valueText}" target="_blank" rel="noopener noreferrer" draggable="false" class="${linkColor} text-sm font-semibold mt-0.5 break-all inline-block cursor-pointer">${valueText}</a>`
+                    : `<p class="text-sm font-semibold text-gray-400/70 dark:text-gray-500 mt-0.5 break-all">${valueText}</p>`;
+
                 const cardDiv = document.createElement('div');
-                cardDiv.className = "flex items-center gap-4 select-none";
+                cardDiv.className = "flex items-center gap-4 select-none py-1";
                 cardDiv.innerHTML = `
                     <div class="w-11 h-11 rounded-2xl ${iconColor} flex items-center justify-center shrink-0 shadow-sm">
                         <i class="${iconFullClass} text-lg"></i>
                     </div>
                     <div>
                         <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200 tracking-wide">${titleText}</h4>
-                        <p class="text-sm font-semibold text-gray-400/70 dark:text-gray-500 mt-0.5 break-all">${valueText}</p>
+                        ${valueHtml}
                     </div>
                 `;
                 infoContainer.appendChild(cardDiv);
@@ -253,7 +261,6 @@
                 document.getElementById('i18n-tip-desc').innerText = i18n.tipDesc || "";
                 document.getElementById('i18n-tip-legal').innerText = i18n.tipLegal || "";
 
-                // 渲染完全配置化的底部信息卡片区
                 renderInfoCards();
 
                 defaultEntryBtn.classList.remove('pointer-events-none', 'opacity-80');
@@ -261,17 +268,14 @@
 
                 updateTopCardDomain(APP_CONFIG.defaultDomain || domains[0]);
                 
-                // 🌟 【修复对齐】：100% 将所有测速参数与 v1.0.4 引擎新增能力字段透传
                 const speedConfig = APP_CONFIG.speedTest || {};
                 testerEngine = new BeaconEngine({
                     timeoutMs: Number(speedConfig.timeout) || Number(APP_CONFIG.timeoutMs) || 5000,
                     concurrency: Number(speedConfig.concurrency) || Number(APP_CONFIG.concurrency) || 3,
                     pingCount: Number(speedConfig.sample) || 3,
-                    
                     protocolMode: speedConfig.protocolMode,
                     probeMode: speedConfig.probeMode,
                     capabilityTtl: speedConfig.capabilityTtl,
-
                     resources: speedConfig.resources,
                     currentWeight: speedConfig.currentWeight,
                     historyWeight: speedConfig.historyWeight,
@@ -279,7 +283,6 @@
                 });
 
                 return true; 
-                
             } catch (err) {
                 console.error("Config load failed:", err);
                 document.getElementById('status-hint').innerText = "核心配置发生异常错误";
@@ -313,7 +316,8 @@
                     
                     const div = document.createElement('div');
                     div.id = `line-row-${index}`;
-                    div.className = "absolute left-0 right-0 h-[48px] flex items-center justify-between px-2 sm:px-3 rounded-xl bg-white dark:bg-gray-800/90 border border-gray-100/40 dark:border-gray-700/50 hover:border-indigo-500/30 dark:hover:border-indigo-500/50 hover:shadow-sm cursor-pointer opacity-100 gpu-slide";
+                    // 🌟 彻底清除了列表项上的边框变色与阴影悬停 hover
+                    div.className = "absolute left-0 right-0 h-[48px] flex items-center justify-between px-2 sm:px-3 rounded-xl bg-white dark:bg-gray-800/90 border border-gray-100/40 dark:border-gray-700/50 cursor-pointer opacity-100 gpu-slide";
                     div.style.transform = `translateY(${index * ROW_HEIGHT}px)`;
 
                     const fontClass = getListFontSizeClass(domain, true);
@@ -428,7 +432,6 @@
                         alert(i18n.alertOffline || "❌ 该线路暂不可用");
                         return;
                     }
-                    // 🌟 规范调用公开契约方法 getTargetUrl
                     const linkUrl = testerEngine.getTargetUrl(item.domain);
                     window.open(linkUrl, '_blank');
                 };
@@ -467,7 +470,6 @@
                 validNodes.sort((a, b) => a[_v] - b[_v]);
                 const bestNode = validNodes[0];
                 updateTopCardDomain(bestNode.domain);
-                // 🌟 最佳线路入口统一调用公开方法 getTargetUrl
                 defaultEntryBtn.href = testerEngine.getTargetUrl(bestNode.domain);
             }
 
