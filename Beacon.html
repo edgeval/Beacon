@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https: http:; img-src 'self' https: data:; style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com data:;">
+    <title>Beacon · Gateway Portal</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.2"></script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+            transition: background-color 0.5s ease;
+        }
+        @media (prefers-color-scheme: dark) {
+            body { background: linear-gradient(135deg, #0b0f19 0%, #111827 100%); }
+        }
+        /* 🔒 字体防护：阻止 Tailwind v4 Preflight 后发覆盖 Font Awesome 字形与 900 核心字重 */
+        .fa-solid, .fas, .fa-brands, .fab, i[class*="fa-"] {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+            font-weight: 900 !important;
+            font-style: normal !important;
+            font-variant: normal !important;
+            text-rendering: auto !important;
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #3b82f6, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        @media (prefers-color-scheme: dark) {
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+        }
+        .gpu-slide {
+            transition: transform 1.2s ease-in-out, opacity 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+            will-change: transform;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-0 sm:p-6 text-gray-800 dark:text-gray-100">
+
+    <div class="w-full max-w-xl min-h-screen sm:min-h-0 bg-white dark:bg-gray-900/90 sm:rounded-3xl shadow-none sm:shadow-2xl border-0 sm:border border-gray-100 dark:border-gray-800 overflow-hidden transition-colors duration-500">
+        
+        <div class="p-6 sm:p-8 border-b border-gray-50 dark:border-gray-800/80 bg-gradient-to-b from-blue-50/40 dark:from-indigo-950/20 to-transparent pt-12 sm:pt-10 flex flex-col items-center">
+            <div class="flex items-center gap-3 mb-2.5">
+                <i id="theme-accent-icon" class="fa-solid fa-bolt-lightning text-2xl sm:text-3xl text-indigo-600 dark:text-indigo-400 animate-pulse"></i>
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-wide">Beacon</h1>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1 text-center">
+                <span class="gradient-text font-semibold" id="i18n-sub-bold">智能线路优选</span> · <span id="i18n-sub-text">等待 engine 初始化</span>
+            </p>
+        </div>
+
+        <div class="p-6 sm:p-8 space-y-6">
+            
+            <div id="default-line-card" class="bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 dark:from-indigo-700 dark:via-purple-700 dark:to-violet-800 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-purple-600/20 dark:shadow-none flex flex-col items-start border border-white/10 relative overflow-hidden transition-all duration-500">
+                <div class="absolute -top-12 -right-12 w-44 h-44 bg-white/5 rounded-full pointer-events-none"></div>
+                
+                <div class="bg-white/15 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-medium text-white/95 mb-5 flex items-center gap-1.5 shadow-inner">
+                    <i class="fa-solid fa-bolt-lightning text-[10px]"></i>
+                    <span id="card-status-text">系统未就绪</span>
+                </div>
+
+                <h2 id="default-domain" class="font-bold tracking-wide mb-2 w-full break-all transition-all duration-300">未载入线路</h2>
+
+                <p id="status-hint" class="text-xs sm:text-sm text-white/80 mb-6 font-medium tracking-wide">
+                    等待 data 加载
+                </p>
+
+                <a id="default-entry-btn" href="#" target="_blank" class="w-full bg-white dark:bg-gray-100 text-purple-700 dark:text-purple-900 py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg hover:bg-purple-50 transition-all active:scale-[0.99] flex items-center justify-center gap-2 pointer-events-none opacity-80">
+                    <span id="i18n-btn-enter">等待配置</span> 
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                </a>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <span class="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-list-ol"></i> <span id="i18n-list-title">全部线路</span>
+                    </span>
+                    <button id="retest-btn" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center gap-1 transition-colors px-2 py-1 rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-950/50 pointer-events-none opacity-50">
+                        <i id="retest-icon" class="fa-solid fa-arrows-rotate"></i> <span id="i18n-btn-retest">重新测速</span>
+                    </button>
+                </div>
+
+                <div class="bg-gray-50/40 dark:bg-gray-950/50 rounded-2xl p-2 border border-gray-100/60 dark:border-gray-800/80 overflow-hidden">
+                    <div class="max-h-[260px] overflow-y-auto pr-1.5 custom-scrollbar">
+                        <div id="lines-container" class="relative w-full">
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="info-cards-container" class="bg-gray-50/50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800/80 rounded-3xl p-5 space-y-5 shadow-sm transition-colors duration-500">
+                </div>
+        </div>
+
+        <div class="px-6 py-6 bg-gray-50/70 dark:bg-gray-950/60 border-t border-gray-50 dark:border-gray-800/80 text-center text-xs text-gray-400 dark:text-gray-500 space-y-2.5 pb-12 sm:pb-6 transition-colors duration-500">
+            <p class="text-gray-500 dark:text-gray-400 bg-white/80 dark:bg-gray-800/80 py-1.5 px-3 rounded-xl border border-gray-100 dark:border-gray-700/80 inline-block shadow-sm max-w-full text-left sm:text-center leading-relaxed" id="i18n-tip-box"></p>
+            <p class="px-2" id="i18n-tip-desc"></p>
+            <p class="pt-1 text-[11px] font-medium text-gray-400/80 dark:text-gray-600" id="i18n-tip-legal"></p>
+        </div>
+    </div>
+
+    <script src="./engine.js"></script>
+
+    <script>
+        // 🔒 防误入自毁
+        (function() {
+            if (location.hostname.includes('127.0.0.1') || location.hostname.includes('localhost') || location.protocol === 'file:' || location.protocol === 'content:') return;
+            if (location.protocol === 'http:') {
+                if (sessionStorage.getItem('secure_redirect_active')) {
+                    sessionStorage.removeItem('secure_redirect_active');
+                    document.documentElement.innerHTML = ''; document.open();
+                    document.write('<html><head><title>404 Not Found</title></head><body bgcolor="white"><center><h1>404 Not Found</h1></center><hr><center>nginx</center></body></html>');
+                    document.close(); window.stop(); throw new Error("404");
+                } else {
+                    sessionStorage.setItem('secure_redirect_active', 'true');
+                    location.replace('https:' + window.location.href.substring(window.location.protocol.length));
+                }
+            } else if (location.protocol === 'https:') {
+                sessionStorage.removeItem('secure_redirect_active');
+            }
+        })();
+
+        const _v = Symbol('AlgorithmicScore'); 
+        const isAvailable = (ms) => ms !== undefined && ms < Number.MAX_SAFE_INTEGER;
+
+        // 🌟 JIT 安全静态颜色映射表：保证 Tailwind 运行时能够捕获和应用正确的类名
+        const PILL_COLOR_MAP = {
+            emerald: "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400",
+            teal: "bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400",
+            amber: "bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400",
+            orange: "bg-orange-50 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400",
+            rose: "bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400",
+            blue: "bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400",
+            purple: "bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400",
+            gray: "bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400"
+        };
+
+        const ICON_COLOR_MAP = {
+            blue: "bg-blue-50 dark:bg-blue-950/50 text-blue-500 dark:text-blue-400",
+            red: "bg-red-50 dark:bg-red-950/50 text-red-500 dark:text-red-400",
+            emerald: "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-500 dark:text-emerald-400",
+            purple: "bg-purple-50 dark:bg-purple-950/50 text-purple-500 dark:text-purple-400",
+            orange: "bg-orange-50 dark:bg-orange-950/50 text-orange-500 dark:text-orange-400",
+            sky: "bg-sky-50 dark:bg-sky-950/50 text-sky-500 dark:text-sky-400",
+            gray: "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
+        };
+
+        let APP_CONFIG = {};
+        let APP_THEME = {};
+        let i18n = {};
+        let domains = [];
+        let testerEngine = null; 
+        
+        const isZH = (navigator.language || navigator.userLanguage).toLowerCase().includes('zh');
+        const langKey = isZH ? 'zh' : 'en';
+
+        const container = document.getElementById('lines-container');
+        const retestBtn = document.getElementById('retest-btn');
+        const retestIcon = document.getElementById('retest-icon');
+        const cardStatusText = document.getElementById('card-status-text');
+        const defaultDomainEl = document.getElementById('default-domain');
+        const defaultEntryBtn = document.getElementById('default-entry-btn');
+        const statusHintEl = document.getElementById('status-hint');
+
+        const ROW_HEIGHT = 52; 
+        let testResults = [];
+
+        // 🌟 配置化升级：动态渲染底部信息卡区
+        function renderInfoCards() {
+            const infoContainer = document.getElementById('info-cards-container');
+            if (!infoContainer) return;
+            infoContainer.innerHTML = '';
+
+            // 安全兼容回退机制：若新版配置项缺失，使用原两张标准卡片回退
+            const cards = APP_CONFIG.infoCards || [
+                { iconClass: "fa-solid fa-globe", title: { zh: "海外访问地址", en: "Global Access" }, value: APP_CONFIG.globalUrl || "暂无", color: "blue" },
+                { iconClass: "fa-solid fa-bookmark", title: { zh: "永久收藏地址", en: "Bookmark" }, value: APP_CONFIG.bookmarkUrl || "暂无", color: "red" }
+            ];
+
+            cards.forEach((card, idx) => {
+                // 动态插入间隔分割线
+                if (idx > 0) {
+                    const divider = document.createElement('div');
+                    divider.className = "border-t border-gray-100/80 dark:border-gray-800 my-1";
+                    infoContainer.appendChild(divider);
+                }
+
+                const iconColor = ICON_COLOR_MAP[card.color] || ICON_COLOR_MAP.blue;
+                const titleText = card.title ? (card.title[langKey] || card.title.zh || "") : "";
+                const valueText = card.value || "暂无";
+                
+                // 支持直接传入 iconClass，或通过旧方式组合 icon 字段
+                const iconFullClass = card.iconClass || `fa-solid ${card.icon || 'fa-globe'}`;
+
+                const cardDiv = document.createElement('div');
+                cardDiv.className = "flex items-center gap-4 select-none";
+                cardDiv.innerHTML = `
+                    <div class="w-11 h-11 rounded-2xl ${iconColor} flex items-center justify-center shrink-0 shadow-sm">
+                        <i class="${iconFullClass} text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200 tracking-wide">${titleText}</h4>
+                        <p class="text-sm font-semibold text-gray-400/70 dark:text-gray-500 mt-0.5 break-all">${valueText}</p>
+                    </div>
+                `;
+                infoContainer.appendChild(cardDiv);
+            });
+        }
+
+        async function loadModularJSONs() {
+            const bust = Date.now();
+            try {
+                const [cfgRes, routeRes, themeRes, langRes, annRes] = await Promise.all([
+                    fetch(`./data/config.json?t=${bust}`).then(r => { if(!r.ok) throw new Error(); return r.json(); }).catch(() => null),
+                    fetch(`./data/routes.json?t=${bust}`).then(r => { if(!r.ok) throw new Error(); return r.json(); }).catch(() => null),
+                    fetch(`./data/theme.json?t=${bust}`).then(r => r.json()).catch(() => ({})),
+                    fetch(`./data/language.json?t=${bust}`).then(r => r.json()).catch(() => ({})),
+                    fetch(`./data/announcement.json?t=${bust}`).then(r => r.json()).catch(() => ({}))
+                ]);
+
+                if (!cfgRes || !routeRes || routeRes.length === 0) {
+                    document.getElementById('status-hint').innerText = isZH ? "配置读取失败，请检查 /data 目录" : "Data missing. Check /data folder.";
+                    return false; 
+                }
+
+                APP_CONFIG = cfgRes;
+                domains = [...new Set(routeRes)].map(d => d.trim());
+                APP_THEME = themeRes;
+                
+                const langDict = langRes[langKey] || {};
+                const annDict = annRes[langKey] || {};
+                i18n = { ...langDict, ...annDict };
+
+                if (APP_THEME.cardGradient) document.getElementById('default-line-card').className = `bg-gradient-to-br ${APP_THEME.cardGradient} rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-purple-600/20 dark:shadow-none flex flex-col items-start border border-white/10 relative overflow-hidden transition-all duration-500`;
+                if (APP_THEME.btnColor) defaultEntryBtn.className = `w-full ${APP_THEME.btnColor} py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2`;
+
+                document.title = APP_CONFIG.title || "Beacon";
+                document.getElementById('i18n-sub-bold').innerHTML = i18n.subBold || "智能线路优选";
+                document.getElementById('i18n-sub-text').innerText = i18n.subText || "就绪";
+                document.getElementById('i18n-btn-enter').innerText = i18n.enterBtn || "立即进入";
+                document.getElementById('i18n-list-title').innerText = i18n.listTitle || "全部线路";
+                document.getElementById('i18n-btn-retest').innerText = i18n.retestBtn || "重新测速";
+                document.getElementById('i18n-tip-box').innerHTML = i18n.tipBox || "";
+                document.getElementById('i18n-tip-desc').innerText = i18n.tipDesc || "";
+                document.getElementById('i18n-tip-legal').innerText = i18n.tipLegal || "";
+
+                // 渲染完全配置化的底部信息卡片区
+                renderInfoCards();
+
+                defaultEntryBtn.classList.remove('pointer-events-none', 'opacity-80');
+                retestBtn.classList.remove('pointer-events-none', 'opacity-50');
+
+                updateTopCardDomain(APP_CONFIG.defaultDomain || domains[0]);
+                
+                // 🌟 【修复对齐】：100% 将所有测速参数与 v1.0.4 引擎新增能力字段透传
+                const speedConfig = APP_CONFIG.speedTest || {};
+                testerEngine = new BeaconEngine({
+                    timeoutMs: Number(speedConfig.timeout) || Number(APP_CONFIG.timeoutMs) || 5000,
+                    concurrency: Number(speedConfig.concurrency) || Number(APP_CONFIG.concurrency) || 3,
+                    pingCount: Number(speedConfig.sample) || 3,
+                    
+                    protocolMode: speedConfig.protocolMode,
+                    probeMode: speedConfig.probeMode,
+                    capabilityTtl: speedConfig.capabilityTtl,
+
+                    resources: speedConfig.resources,
+                    currentWeight: speedConfig.currentWeight,
+                    historyWeight: speedConfig.historyWeight,
+                    timeoutPenalty: speedConfig.timeoutPenalty
+                });
+
+                return true; 
+                
+            } catch (err) {
+                console.error("Config load failed:", err);
+                document.getElementById('status-hint').innerText = "核心配置发生异常错误";
+                return false;
+            }
+        }
+
+        function getListFontSizeClass(domain, isAvail) {
+            const baseWeight = isAvail ? "font-semibold text-gray-800 dark:text-gray-100" : "font-medium text-gray-400/80 dark:text-gray-500";
+            if (domain.length >= 17) return `${baseWeight} text-[11px] sm:text-xs tracking-tighter whitespace-nowrap transition-all duration-300`;
+            if (domain.length >= 15) return `${baseWeight} text-xs sm:text-sm tracking-tight whitespace-nowrap transition-all duration-300`;
+            return `${baseWeight} text-sm sm:text-base truncate transition-all duration-300`;
+        }
+
+        function updateTopCardDomain(domain) {
+            const cleanDomain = domain.replace(/^https?:\/\//, '').replace(/\/+$/, '');
+            defaultDomainEl.innerText = cleanDomain;
+            if (cleanDomain.length >= 18) defaultDomainEl.className = "font-bold text-lg sm:text-xl tracking-tighter mb-2 w-full truncate transition-all duration-300";
+            else if (cleanDomain.length >= 16) defaultDomainEl.className = "font-bold text-xl sm:text-2xl tracking-tight mb-2 w-full truncate transition-all duration-300";
+            else defaultDomainEl.className = "font-bold text-2xl sm:text-3xl tracking-wide mb-2 w-full truncate transition-all duration-300";
+        }
+
+        function initListUI() {
+            if (container.children.length !== domains.length) {
+                container.innerHTML = '';
+                testResults = [];
+                container.style.height = `${domains.length * ROW_HEIGHT}px`;
+                
+                domains.forEach((domain, index) => {
+                    testResults.push({ domain, ms: undefined, [_v]: undefined, index, lastRank: index });
+                    
+                    const div = document.createElement('div');
+                    div.id = `line-row-${index}`;
+                    div.className = "absolute left-0 right-0 h-[48px] flex items-center justify-between px-2 sm:px-3 rounded-xl bg-white dark:bg-gray-800/90 border border-gray-100/40 dark:border-gray-700/50 hover:border-indigo-500/30 dark:hover:border-indigo-500/50 hover:shadow-sm cursor-pointer opacity-100 gpu-slide";
+                    div.style.transform = `translateY(${index * ROW_HEIGHT}px)`;
+
+                    const fontClass = getListFontSizeClass(domain, true);
+                    div.innerHTML = `
+                        <div class="flex items-center gap-2.5 overflow-hidden">
+                            <div id="badge-${index}" class="w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 text-xs font-bold flex items-center justify-center shrink-0 transition-all duration-300">-</div>
+                            <span id="domain-text-${index}" class="${fontClass}">${domain}</span>
+                        </div>
+                        <div id="pill-${index}" class="bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500">
+                            ${i18n.pillTesting || "● 采集中..."}
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            } else {
+                testResults.forEach((item) => {
+                    item.ms = undefined; 
+                    item[_v] = undefined;
+                    const badgeEl = document.getElementById(`badge-${item.index}`);
+                    const pillEl = document.getElementById(`pill-${item.index}`);
+                    const domainEl = document.getElementById(`domain-text-${item.index}`);
+                    
+                    if (badgeEl) {
+                        badgeEl.className = "w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 text-xs font-bold flex items-center justify-center shrink-0 transition-all duration-300";
+                        badgeEl.innerText = "-";
+                    }
+                    if (pillEl) {
+                        pillEl.className = "bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500 animate-pulse";
+                        pillEl.innerHTML = i18n.pillTesting || "● 采集中...";
+                    }
+                    if (domainEl) {
+                        domainEl.className = getListFontSizeClass(item.domain, true);
+                    }
+                });
+            }
+        }
+
+        function updatePillContent(item) {
+            const isTesting = item.ms === undefined;
+            const isAvail = isAvailable(item.ms);
+            
+            const pillEl = document.getElementById(`pill-${item.index}`);
+            const domainEl = document.getElementById(`domain-text-${item.index}`);
+            if (!pillEl || !domainEl) return;
+
+            domainEl.className = getListFontSizeClass(item.domain, !isTesting && isAvail);
+
+            let pillClass = "", pillText = "";
+            if (isTesting) {
+                pillClass = "bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 animate-pulse";
+                pillText = i18n.pillTesting || "● 采集中...";
+            } else if (!isAvail) {
+                pillClass = "bg-rose-50 dark:bg-rose-950/50 text-rose-400/90 dark:text-rose-400";
+                pillText = i18n.pillOffline || "● 暂不可用";
+            } else {
+                const defaultLevels = [
+                    { max: 100, label: { zh: "极速", en: "Fast" }, color: "emerald" },
+                    { max: 200, label: { zh: "流畅", en: "Good" }, color: "teal" },
+                    { max: 500, label: { zh: "一般", en: "Normal" }, color: "amber" },
+                    { max: 1000, label: { zh: "卡顿", en: "Laggy" }, color: "orange" },
+                    { max: 999999, label: { zh: "很差", en: "Poor" }, color: "rose" }
+                ];
+                const levels = APP_CONFIG.latencyLevels || defaultLevels;
+
+                let matched = levels[levels.length - 1];
+                for (let i = 0; i < levels.length; i++) {
+                    if (item.ms <= levels[i].max) {
+                        matched = levels[i];
+                        break;
+                    }
+                }
+
+                pillClass = PILL_COLOR_MAP[matched.color] || PILL_COLOR_MAP.gray;
+                const labelStr = matched.label ? (matched.label[langKey] || matched.label.zh || "") : "";
+                pillText = `● ${labelStr} ${item.ms}ms`;
+            }
+
+            pillEl.className = `${pillClass} px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-300`;
+            pillEl.innerHTML = pillText;
+        }
+
+        function finalSortAndRender() {
+            const sorted = [...testResults].sort((a, b) => {
+                const valA = a[_v] ?? Number.MAX_SAFE_INTEGER;
+                const valB = b[_v] ?? Number.MAX_SAFE_INTEGER;
+                if (valA === valB) return a.lastRank - b.lastRank;
+                return valA - valB; 
+            });
+            
+            let rankCounter = 1;
+
+            sorted.forEach((item, sortedIndex) => {
+                item.lastRank = sortedIndex;
+                const rowEl = document.getElementById('line-row-' + item.index);
+                const badgeEl = document.getElementById('badge-' + item.index);
+                if (!rowEl || !badgeEl) return;
+
+                rowEl.style.transform = `translateY(${sortedIndex * ROW_HEIGHT}px)`;
+
+                const isAvail = isAvailable(item.ms);
+                if (isAvail) {
+                    badgeEl.className = "w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 text-xs font-extrabold flex items-center justify-center shrink-0 transition-all duration-300";
+                    badgeEl.innerText = rankCounter++;
+                } else {
+                    badgeEl.className = "w-8 h-8 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-300 dark:text-gray-600 text-xs font-extrabold flex items-center justify-center shrink-0 transition-all duration-300";
+                    badgeEl.innerText = "-";
+                }
+
+                rowEl.onclick = () => {
+                    if (item.ms === undefined) return;
+                    if (!isAvail) {
+                        alert(i18n.alertOffline || "❌ 该线路暂不可用");
+                        return;
+                    }
+                    // 🌟 规范调用公开契约方法 getTargetUrl
+                    const linkUrl = testerEngine.getTargetUrl(item.domain);
+                    window.open(linkUrl, '_blank');
+                };
+            });
+        }
+
+        async function startSpeedTest() {
+            if (!testerEngine) return;
+            retestBtn.disabled = true;
+            retestIcon.classList.add('animate-spin');
+            
+            initListUI();
+            
+            document.getElementById('i18n-sub-text').innerText = i18n.subText || "动态路由测速中...";
+            cardStatusText.innerText = i18n.statusTesting || "AI 路由评估与多重防抖中...";
+            statusHintEl.innerText = i18n.hintLoading || "环境采集与历史建模...";
+
+            let availableCount = 0;
+
+            const onProgress = (index, currentMedian) => {
+                const domain = domains[index];
+                testResults[index].ms = currentMedian; 
+                testResults[index][_v] = testerEngine.getScore(domain, currentMedian);
+                
+                if (isAvailable(currentMedian)) availableCount++;
+                
+                updatePillContent(testResults[index]);
+            };
+
+            await testerEngine.runPool(domains, onProgress);
+            
+            finalSortAndRender();
+            
+            const validNodes = testResults.filter(r => isAvailable(r.ms) && r[_v] !== undefined);
+            if (validNodes.length > 0) {
+                validNodes.sort((a, b) => a[_v] - b[_v]);
+                const bestNode = validNodes[0];
+                updateTopCardDomain(bestNode.domain);
+                // 🌟 最佳线路入口统一调用公开方法 getTargetUrl
+                defaultEntryBtn.href = testerEngine.getTargetUrl(bestNode.domain);
+            }
+
+            document.getElementById('i18n-sub-text').innerText = i18n.statusDone || "已调度至最佳链路";
+            cardStatusText.innerText = i18n.statusFound || "已为您智能调度至长期最佳线路";
+            statusHintEl.innerText = isZH ? `共 ${availableCount}/${domains.length} 条可用网络` : `${availableCount}/${domains.length} Networks Available`;
+            
+            retestBtn.disabled = false;
+            retestIcon.classList.remove('animate-spin');
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (typeof BeaconEngine === 'undefined') {
+                document.getElementById('status-hint').innerText = isZH ? "Engine 缺失 (engine.js 未加载)" : "Engine.js missing.";
+                return;
+            }
+            
+            const isReady = await loadModularJSONs();
+            if (isReady) {
+                startSpeedTest();
+            }
+        });
+        
+        retestBtn.addEventListener('click', startSpeedTest);
+    </script>
+</body>
+</html>
