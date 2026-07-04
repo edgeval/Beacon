@@ -1,0 +1,30 @@
+{
+  "zh": {
+    "subBold": "智能线路优选",
+    "subText": "等待测速",
+    "enterBtn": "进入最佳线路",
+    "listTitle": "线路列表",
+    "retestBtn": "重新测速",
+    "pillTesting": "● 测速中",
+    "pillOffline": "● 不可用",
+    "statusTesting": "正在检测线路延迟...",
+    "statusDone": "最佳线路已就绪",
+    "statusFound": "已选择当前最优线路",
+    "hintLoading": "正在获取测速结果...",
+    "alertOffline": "❌ 当前线路不可用，请选择其他线路"
+  },
+  "en": {
+    "subBold": "Smart Route Selection",
+    "subText": "Waiting",
+    "enterBtn": "Enter Best Route",
+    "listTitle": "Route List",
+    "retestBtn": "Retest",
+    "pillTesting": "● Testing",
+    "pillOffline": "● Offline",
+    "statusTesting": "Testing route latency...",
+    "statusDone": "Best route ready",
+    "statusFound": "Best route selected",
+    "hintLoading": "Collecting latency data...",
+    "alertOffline": "❌ This route is unavailable. Please choose another."
+  }
+}
