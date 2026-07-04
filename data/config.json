@@ -1,0 +1,50 @@
+{
+  "title": "Beacon · 智能线路",
+  "defaultDomain": "baidu.com",
+  "timeoutMs": 5000,
+  "concurrency": 3,
+  "speedTest": {
+    "timeout": 5000,
+    "concurrency": 4,
+    "sample": 3,
+    "protocolMode": "auto",
+    "probeMode": "auto",
+    "capabilityTtl": 3600000,
+    "resources": [
+      "/favicon.ico",
+      "/robots.txt",
+      "/apple-touch-icon.png",
+      "/favicon.png"
+    ],
+    "currentWeight": 0.8,
+    "historyWeight": 0.2,
+    "timeoutPenalty": 500
+  },
+  "latencyLevels": [
+    { "max": 100, "label": { "zh": "极速", "en": "Fast" }, "color": "emerald" },
+    { "max": 250, "label": { "zh": "流畅", "en": "Good" }, "color": "teal" },
+    { "max": 600, "label": { "zh": "一般", "en": "Normal" }, "color": "amber" },
+    { "max": 1200, "label": { "zh": "卡顿", "en": "Laggy" }, "color": "orange" },
+    { "max": 999999, "label": { "zh": "很差", "en": "Poor" }, "color": "rose" }
+  ],
+  "infoCards": [
+    {
+      "iconClass": "fa-solid fa-globe",
+      "title": { "zh": "海外访问地址", "en": "Global Access" },
+      "value": "https://global.yourdomain.com",
+      "color": "blue"
+    },
+    {
+      "iconClass": "fa-brands fa-github",
+      "title": { "zh": "开源项目地址", "en": "Open Source Repository" },
+      "value": "https://github.com/edgeval/Beacon",
+      "color": "gray"
+    },
+    {
+      "iconClass": "fa-solid fa-bug",
+      "title": { "zh": "反馈与支持", "en": "Issues & Support" },
+      "value": "GitHub Issues",
+      "color": "emerald"
+    }
+  ]
+}
