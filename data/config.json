@@ -31,7 +31,7 @@
     {
       "iconClass": "fa-solid fa-globe",
       "title": { "zh": "海外访问地址", "en": "Global Access" },
-      "value": "https://global.yourdomain.com",
+      "value": "https://github.com/edgeval/Beacon",
       "color": "blue"
     },
     {
@@ -43,7 +43,7 @@
     {
       "iconClass": "fa-solid fa-bug",
       "title": { "zh": "反馈与支持", "en": "Issues & Support" },
-      "value": "GitHub Issues",
+      "value": "https://github.com/edgeval/Beacon/issues",
       "color": "emerald"
     }
   ]
