@@ -1,0 +1,4 @@
+{
+  "cardGradient": "from-indigo-600 via-purple-600 to-violet-700 dark:from-indigo-700 dark:via-purple-700 dark:to-violet-800",
+  "btnColor": "bg-white dark:bg-gray-100 text-purple-700 dark:text-purple-900 hover:bg-purple-50"
+}
