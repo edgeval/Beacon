@@ -1,0 +1,12 @@
+{
+  "zh": {
+    "tipBox": "🔥 <b>温馨提示：</b> 推荐使用 Chrome 或 Safari 浏览器访问以获得最佳动态路由测速效果。",
+    "tipDesc": "如果当前线路卡顿，您可以随时点击右侧的「重新测速」按钮刷新全局延迟评分。",
+    "tipLegal": "© 2026 Colton Flynn · MIT License"
+  },
+  "en": {
+    "tipBox": "🔥 <b>Notice:</b> Chrome or Safari is recommended for optimal dynamic latency probing.",
+    "tipDesc": "If your current connection feels sluggish, click 'Retest' to refresh global routing scores.",
+    "tipLegal": "© 2026 Colton Flynn · MIT License"
+  }
+}
