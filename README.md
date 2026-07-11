@@ -1,89 +1,58 @@
-# Beacon
+Beacon
 
-Beacon is a lightweight browser-based smart route selector.
+Beacon is a lightweight, browser-based smart route selector.
 
-It measures the availability and latency of multiple HTTP and HTTPS endpoints directly in the user's browser, ranks them using real-time probing, and automatically recommends the best available route.
+It probes multiple HTTP and HTTPS endpoints directly from the user's browser, measures availability and latency, and recommends the best available route in real time.
 
-Beacon requires no backend service and can be deployed on any static hosting platform.
-
+Beacon is fully static. It requires no backend service, no database, and no build process.
 
 ---
 
-## Features
+Features
 
-- Browser-side latency testing
-- Automatic route selection
-- No backend required
-- Static deployment
+- Browser-side route probing
+- Automatic best-route selection
+- Latency ranking with multiple samples
+- CORS and no-cors probing support
 - JSON-driven configuration
 - Responsive interface
 - Light and dark mode support
+- Static deployment friendly
 
 ---
 
-## Quick Start
+Project Structure
 
-Clone the repository:
-
-```bash
-git clone https://github.com/edgeval/Beacon.git
-cd Beacon
-```
-
-Start a local web server:
-
-```bash
-python3 -m http.server 8080
-```
-
-or
-
-```bash
-npx serve .
-```
-
-Then open:
-
-```
-http://localhost:8080
-```
-
----
-
-## Project Structure
-
-```text
 Beacon/
 ├── index.html
 ├── engine.js
 ├── README.md
+├── LICENSE
 └── data/
     ├── announcement.json
     ├── config.json
     ├── language.json
     ├── routes.json
     └── theme.json
-```
 
 ---
 
-## Configuration
+Configuration
 
-Most deployments only require editing the files under the `data` directory.
+Most customization is done through the files in the "data" directory.
 
-| File | Description |
-|------|-------------|
-| `routes.json` | Route list |
-| `config.json` | Application settings |
-| `language.json` | Interface language |
-| `theme.json` | Theme configuration |
-| `announcement.json` | Footer information |
+File| Purpose
+"routes.json"| Route list
+"config.json"| Application and probing settings
+"language.json"| Interface text
+"theme.json"| Visual theme
+"announcement.json"| Footer and notice content
 
 ---
 
-## Deployment
+Deployment
 
-Beacon is a static web application and can be deployed on any static hosting platform, including:
+Beacon can be deployed on any static hosting platform, including:
 
 - GitHub Pages
 - Cloudflare Pages
@@ -92,19 +61,29 @@ Beacon is a static web application and can be deployed on any static hosting pla
 - Nginx
 - Apache
 
-HTTPS is recommended for production deployments.
+HTTPS is recommended for production use.
 
 ---
 
-## Browser Compatibility
+Notes
 
-Beacon is designed for modern browsers supporting the Fetch API.
+Beacon runs entirely in the browser. Its probing results reflect the user's current browser and network environment.
 
-The latest versions of Chrome, Edge, Safari and Firefox are recommended.
+When "no-cors" probing is used, the browser can confirm that a request was sent, but it cannot expose the full HTTP response status. For precise service health checks, a backend monitoring system is still required.
+
+Beacon is intended to be a lightweight route selection portal, not a full observability or uptime monitoring platform.
 
 ---
 
-## License
+Browser Compatibility
+
+Beacon is designed for modern browsers with Fetch API support.
+
+The latest versions of Chrome, Edge, Safari, and Firefox are recommended.
+
+---
+
+License
 
 Beacon is released under the MIT License.
 
