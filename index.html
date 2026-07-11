@@ -44,6 +44,38 @@
             -webkit-user-drag: none;
             -webkit-touch-callout: default;
         }
+
+        .domain-tooltip {
+            position: fixed;
+            z-index: 1000;
+            max-width: min(88vw, 420px);
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: rgba(17, 24, 39, 0.96);
+            color: #f9fafb;
+            font-size: 13px;
+            line-height: 1.45;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.28);
+            opacity: 0;
+            transform: translateY(4px) scale(0.98);
+            pointer-events: none;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+
+        .domain-tooltip.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        @media (prefers-color-scheme: light) {
+            .domain-tooltip {
+                background: rgba(255, 255, 255, 0.98);
+                color: #111827;
+                border: 1px solid rgba(148, 163, 184, 0.35);
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-0 sm:p-6 text-gray-800 dark:text-gray-100">
@@ -109,6 +141,8 @@
         </div>
     </div>
 
+    <div id="domain-tooltip" class="domain-tooltip" role="tooltip" aria-hidden="true"></div>
+
     <script src="./engine.js"></script>
 
     <script>
@@ -172,6 +206,137 @@
         const defaultDomainEl = document.getElementById('default-domain');
         const defaultEntryBtn = document.getElementById('default-entry-btn');
         const statusHintEl = document.getElementById('status-hint');
+        const domainTooltip = document.getElementById('domain-tooltip');
+
+        let tooltipHideTimer = null;
+        let longPressTimer = null;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let suppressNextRowClick = false;
+
+        function clearTooltipHideTimer() {
+            if (tooltipHideTimer) {
+                clearTimeout(tooltipHideTimer);
+                tooltipHideTimer = null;
+            }
+        }
+
+        function hideDomainTooltip(immediate = false) {
+            clearTooltipHideTimer();
+
+            const hide = () => {
+                domainTooltip.classList.remove('is-visible');
+                domainTooltip.setAttribute('aria-hidden', 'true');
+            };
+
+            if (immediate) {
+                hide();
+                return;
+            }
+
+            tooltipHideTimer = setTimeout(hide, 5000);
+        }
+
+        function positionDomainTooltip(anchor) {
+            const anchorRect = anchor.getBoundingClientRect();
+            const tooltipRect = domainTooltip.getBoundingClientRect();
+            const margin = 12;
+
+            let left = anchorRect.left + (anchorRect.width - tooltipRect.width) / 2;
+            left = Math.max(margin, Math.min(left, window.innerWidth - tooltipRect.width - margin));
+
+            let top = anchorRect.top - tooltipRect.height - 10;
+            if (top < margin) top = anchorRect.bottom + 10;
+            top = Math.max(margin, Math.min(top, window.innerHeight - tooltipRect.height - margin));
+
+            domainTooltip.style.left = `${Math.round(left)}px`;
+            domainTooltip.style.top = `${Math.round(top)}px`;
+        }
+
+        function showDomainTooltip(anchor, fullDomain) {
+            clearTooltipHideTimer();
+            domainTooltip.textContent = fullDomain;
+            domainTooltip.classList.add('is-visible');
+            domainTooltip.setAttribute('aria-hidden', 'false');
+            positionDomainTooltip(anchor);
+        }
+
+        function cancelLongPress() {
+            if (longPressTimer) {
+                clearTimeout(longPressTimer);
+                longPressTimer = null;
+            }
+        }
+
+        function bindDomainTooltip(element, fullDomain) {
+            element.tabIndex = 0;
+            element.dataset.fullDomain = fullDomain;
+            element.setAttribute('aria-label', fullDomain);
+
+            const getFullDomain = () => element.dataset.fullDomain || fullDomain;
+
+            element.addEventListener('mouseenter', () => {
+                showDomainTooltip(element, getFullDomain());
+            });
+
+            element.addEventListener('mouseleave', () => {
+                hideDomainTooltip(false);
+            });
+
+            element.addEventListener('focus', () => {
+                showDomainTooltip(element, getFullDomain());
+            });
+
+            element.addEventListener('blur', () => {
+                hideDomainTooltip(false);
+            });
+
+            element.addEventListener('touchstart', event => {
+                if (event.touches.length !== 1) return;
+
+                clearTooltipHideTimer();
+                cancelLongPress();
+
+                touchStartX = event.touches[0].clientX;
+                touchStartY = event.touches[0].clientY;
+
+                longPressTimer = setTimeout(() => {
+                    longPressTimer = null;
+                    suppressNextRowClick = true;
+                    showDomainTooltip(element, getFullDomain());
+                }, 500);
+            }, { passive: true });
+
+            element.addEventListener('touchmove', event => {
+                if (event.touches.length !== 1) {
+                    cancelLongPress();
+                    return;
+                }
+
+                const deltaX = Math.abs(event.touches[0].clientX - touchStartX);
+                const deltaY = Math.abs(event.touches[0].clientY - touchStartY);
+
+                if (deltaX > 10 || deltaY > 10) cancelLongPress();
+            }, { passive: true });
+
+            element.addEventListener('touchend', () => {
+                const wasLongPress = longPressTimer === null && domainTooltip.classList.contains('is-visible');
+                cancelLongPress();
+                if (wasLongPress) hideDomainTooltip(false);
+            }, { passive: true });
+
+            element.addEventListener('touchcancel', () => {
+                cancelLongPress();
+                hideDomainTooltip(false);
+            }, { passive: true });
+
+            element.addEventListener('keydown', event => {
+                if (event.key === 'Escape') {
+                    hideDomainTooltip(true);
+                    element.blur();
+                }
+            });
+        }
 
         function setEntryEnabled(enabled, url = '#') {
             defaultEntryBtn.href = enabled ? url : '#';
@@ -438,9 +603,8 @@
             const baseWeight = available
                 ? 'font-semibold text-gray-800 dark:text-gray-100'
                 : 'font-medium text-gray-400/80 dark:text-gray-500';
-            if (domain.length >= 17) return `${baseWeight} text-[11px] sm:text-xs tracking-tighter whitespace-nowrap transition-all duration-300`;
-            if (domain.length >= 15) return `${baseWeight} text-xs sm:text-sm tracking-tight whitespace-nowrap transition-all duration-300`;
-            return `${baseWeight} text-sm sm:text-base truncate transition-all duration-300`;
+
+            return `${baseWeight} text-sm sm:text-base truncate whitespace-nowrap transition-all duration-300`;
         }
 
         function updateTopCardDomain(domain) {
@@ -454,9 +618,15 @@
             }
 
             defaultDomainEl.textContent = displayDomain;
-            if (displayDomain.length >= 18) defaultDomainEl.className = 'font-bold text-lg sm:text-xl tracking-tighter mb-2 w-full truncate transition-all duration-300';
-            else if (displayDomain.length >= 16) defaultDomainEl.className = 'font-bold text-xl sm:text-2xl tracking-tight mb-2 w-full truncate transition-all duration-300';
-            else defaultDomainEl.className = 'font-bold text-2xl sm:text-3xl tracking-wide mb-2 w-full truncate transition-all duration-300';
+            defaultDomainEl.className = 'font-bold text-xl sm:text-2xl tracking-wide mb-2 w-full truncate transition-all duration-300 cursor-help outline-none focus:ring-2 focus:ring-white/40 rounded-md';
+
+            if (defaultDomainEl.dataset.tooltipBound !== 'true') {
+                bindDomainTooltip(defaultDomainEl, displayDomain);
+                defaultDomainEl.dataset.tooltipBound = 'true';
+            }
+
+            defaultDomainEl.dataset.fullDomain = displayDomain;
+            defaultDomainEl.setAttribute('aria-label', displayDomain);
         }
 
         function initListUI() {
@@ -483,8 +653,9 @@
 
                     const domainText = document.createElement('span');
                     domainText.id = `domain-text-${index}`;
-                    domainText.className = getListFontSizeClass(domain, true);
+                    domainText.className = `${getListFontSizeClass(domain, true)} cursor-help outline-none focus:ring-2 focus:ring-indigo-400/50 rounded-md`;
                     domainText.textContent = domain;
+                    bindDomainTooltip(domainText, domain);
 
                     const pill = document.createElement('div');
                     pill.id = `pill-${index}`;
@@ -513,7 +684,9 @@
                         pill.className = 'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500 animate-pulse';
                         pill.textContent = i18n.pillTesting || '● 采集中...';
                     }
-                    if (domainText) domainText.className = getListFontSizeClass(item.domain, true);
+                    if (domainText) {
+                        domainText.className = `${getListFontSizeClass(item.domain, true)} cursor-help outline-none focus:ring-2 focus:ring-indigo-400/50 rounded-md`;
+                    }
                     if (row) {
                         row.onclick = null;
                         row.style.transform = `translateY(${item.index * ROW_HEIGHT}px)`;
@@ -529,7 +702,7 @@
             const domainText = document.getElementById(`domain-text-${item.index}`);
             if (!pill || !domainText) return;
 
-            domainText.className = getListFontSizeClass(item.domain, !testing && available);
+            domainText.className = `${getListFontSizeClass(item.domain, !testing && available)} cursor-help outline-none focus:ring-2 focus:ring-indigo-400/50 rounded-md`;
 
             let pillClass;
             let pillText;
@@ -577,7 +750,13 @@
                     badge.textContent = '-';
                 }
 
-                row.onclick = () => {
+                row.onclick = event => {
+                    if (suppressNextRowClick) {
+                        suppressNextRowClick = false;
+                        event.preventDefault();
+                        return;
+                    }
+
                     if (item.ms === undefined) return;
                     if (!available) {
                         alert(i18n.alertOffline || '❌ 该线路暂不可用');
@@ -663,6 +842,15 @@
             const ready = await loadModularJSONs();
             if (ready) startSpeedTest();
         });
+
+        document.addEventListener('pointerdown', event => {
+            if (!event.target.closest('[data-full-domain]')) {
+                hideDomainTooltip(true);
+            }
+        });
+
+        window.addEventListener('resize', () => hideDomainTooltip(true));
+        window.addEventListener('scroll', () => hideDomainTooltip(true), true);
 
         window.addEventListener('pagehide', () => {
             if (testerEngine) testerEngine.destroy();
