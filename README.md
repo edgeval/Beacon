@@ -1,4 +1,4 @@
-Beacon
+# Beacon
 
 Beacon is a lightweight, browser-based smart route selector.
 
@@ -8,7 +8,7 @@ Beacon is fully static. It requires no backend service, no database, and no buil
 
 ---
 
-Features
+## Features
 
 - Browser-side route probing
 - Automatic best-route selection
@@ -21,61 +21,50 @@ Features
 
 ---
 
-Project Structure
+## Files
 
-Beacon/
-├── index.html
-├── engine.js
-├── README.md
-├── LICENSE
-└── data/
-    ├── announcement.json
-    ├── config.json
-    ├── language.json
-    ├── routes.json
-    └── theme.json
+Beacon uses a simple static structure:
 
----
-
-Configuration
-
-Most customization is done through the files in the "data" directory.
-
-File| Purpose
-"routes.json"| Route list
-"config.json"| Application and probing settings
-"language.json"| Interface text
-"theme.json"| Visual theme
-"announcement.json"| Footer and notice content
+- `index.html` — main page and interface
+- `engine.js` — route probing and scoring engine
+- `data/routes.json` — route list
+- `data/config.json` — application and probing settings
+- `data/language.json` — interface text
+- `data/theme.json` — visual theme
+- `data/announcement.json` — footer and notice content
+- `LICENSE` — MIT license
 
 ---
 
-Deployment
+## Configuration
 
-Beacon can be deployed on any static hosting platform, including:
+Most customization is done through the files in the `data` directory.
 
-- GitHub Pages
-- Cloudflare Pages
-- Netlify
-- Vercel
-- Nginx
-- Apache
+The most important file is `routes.json`, which defines the available routes.
+
+Application behavior, probing options, latency levels, interface text, theme, and footer notices can also be adjusted through the JSON files in `data`.
+
+---
+
+## Deployment
+
+Beacon can be deployed on any static hosting platform, including GitHub Pages, Cloudflare Pages, Netlify, Vercel, Nginx, or Apache.
 
 HTTPS is recommended for production use.
 
 ---
 
-Notes
+## Notes
 
 Beacon runs entirely in the browser. Its probing results reflect the user's current browser and network environment.
 
-When "no-cors" probing is used, the browser can confirm that a request was sent, but it cannot expose the full HTTP response status. For precise service health checks, a backend monitoring system is still required.
+When `no-cors` probing is used, the browser can confirm that a request was sent, but it cannot expose the full HTTP response status.
 
 Beacon is intended to be a lightweight route selection portal, not a full observability or uptime monitoring platform.
 
 ---
 
-Browser Compatibility
+## Browser Compatibility
 
 Beacon is designed for modern browsers with Fetch API support.
 
@@ -83,7 +72,7 @@ The latest versions of Chrome, Edge, Safari, and Firefox are recommended.
 
 ---
 
-License
+## License
 
 Beacon is released under the MIT License.
 
