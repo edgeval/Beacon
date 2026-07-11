@@ -1,4 +1,6 @@
-Beacon
+# Beacon
+
+[English](README.md) | **简体中文**
 
 一个轻量级、纯浏览器运行的智能线路优选门户。
 
