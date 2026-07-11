@@ -6,7 +6,6 @@ It measures the availability and latency of multiple HTTP and HTTPS endpoints di
 
 Beacon requires no backend service and can be deployed on any static hosting platform.
 
-[简体中文](README.zh-CN.md)
 
 ---
 
