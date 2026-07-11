@@ -15,34 +15,70 @@
             font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
             transition: background-color 0.5s ease;
         }
+
         @media (prefers-color-scheme: dark) {
-            body { background: linear-gradient(135deg, #0b0f19 0%, #111827 100%); }
+            body {
+                background: linear-gradient(135deg, #0b0f19 0%, #111827 100%);
+            }
         }
-        .fa-solid, .fas, .fa-brands, .fab, i[class*="fa-"] {
+
+        .fa-solid,
+        .fas,
+        .fa-brands,
+        .fab,
+        i[class*="fa-"] {
             font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
             font-weight: 900 !important;
             font-style: normal !important;
             font-variant: normal !important;
             text-rendering: auto !important;
         }
+
         .gradient-text {
             background: linear-gradient(45deg, #3b82f6, #6366f1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        @media (prefers-color-scheme: dark) {
-            .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
         }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #334155;
+            }
+        }
+
         .gpu-slide {
-            transition: transform 1.2s ease-in-out, opacity 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+            transition:
+                transform 1.2s ease-in-out,
+                opacity 0.5s ease,
+                background-color 0.5s ease,
+                border-color 0.5s ease;
             will-change: transform;
         }
+
         a {
             -webkit-user-drag: none;
             -webkit-touch-callout: default;
+        }
+
+        .domain-trigger {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            touch-action: pan-y;
         }
 
         .domain-tooltip {
@@ -61,7 +97,9 @@
             opacity: 0;
             transform: translateY(4px) scale(0.98);
             pointer-events: none;
-            transition: opacity 0.18s ease, transform 0.18s ease;
+            transition:
+                opacity 0.18s ease,
+                transform 0.18s ease;
         }
 
         .domain-tooltip.is-visible {
@@ -78,6 +116,7 @@
         }
     </style>
 </head>
+
 <body class="min-h-screen flex items-center justify-center p-0 sm:p-6 text-gray-800 dark:text-gray-100">
 
     <div class="w-full max-w-xl min-h-screen sm:min-h-0 bg-white dark:bg-gray-900/90 sm:rounded-3xl shadow-none sm:shadow-2xl border-0 sm:border border-gray-100 dark:border-gray-800 overflow-hidden transition-colors duration-500">
@@ -87,8 +126,11 @@
                 <i id="theme-accent-icon" class="fa-solid fa-bolt-lightning text-2xl sm:text-3xl text-indigo-600 dark:text-indigo-400 animate-pulse"></i>
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-wide">Beacon</h1>
             </div>
+
             <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1 text-center">
-                <span class="gradient-text font-semibold" id="i18n-sub-bold">智能线路优选</span> · <span id="i18n-sub-text">等待 engine 初始化</span>
+                <span class="gradient-text font-semibold" id="i18n-sub-bold">智能线路优选</span>
+                ·
+                <span id="i18n-sub-text">等待 engine 初始化</span>
             </p>
         </div>
 
@@ -102,13 +144,24 @@
                     <span id="card-status-text">系统未就绪</span>
                 </div>
 
-                <h2 id="default-domain" class="font-bold tracking-wide mb-2 w-full break-all transition-all duration-300">未载入线路</h2>
+                <h2 id="default-domain" class="font-bold tracking-wide mb-2 w-full break-all transition-all duration-300">
+                    未载入线路
+                </h2>
 
                 <p id="status-hint" class="text-xs sm:text-sm text-white/80 mb-6 font-medium tracking-wide">
                     等待 data 加载
                 </p>
 
-                <a id="default-entry-btn" href="#" target="_blank" rel="noopener noreferrer" draggable="false" aria-disabled="true" tabindex="-1" class="w-full bg-white dark:bg-gray-100 text-purple-700 dark:text-purple-900 py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 pointer-events-none opacity-80">
+                <a
+                    id="default-entry-btn"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    draggable="false"
+                    aria-disabled="true"
+                    tabindex="-1"
+                    class="w-full bg-white dark:bg-gray-100 text-purple-700 dark:text-purple-900 py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 pointer-events-none opacity-80"
+                >
                     <span id="i18n-btn-enter">等待配置</span>
                     <i class="fa-solid fa-arrow-right text-sm"></i>
                 </a>
@@ -117,10 +170,17 @@
             <div>
                 <div class="flex items-center justify-between mb-3 px-1">
                     <span class="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
-                        <i class="fa-solid fa-list-ol"></i> <span id="i18n-list-title">全部线路</span>
+                        <i class="fa-solid fa-list-ol"></i>
+                        <span id="i18n-list-title">全部线路</span>
                     </span>
-                    <button id="retest-btn" type="button" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 transition-colors px-2 py-1 rounded-md pointer-events-none opacity-50">
-                        <i id="retest-icon" class="fa-solid fa-arrows-rotate"></i> <span id="i18n-btn-retest">重新测速</span>
+
+                    <button
+                        id="retest-btn"
+                        type="button"
+                        class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 transition-colors px-2 py-1 rounded-md pointer-events-none opacity-50"
+                    >
+                        <i id="retest-icon" class="fa-solid fa-arrows-rotate"></i>
+                        <span id="i18n-btn-retest">重新测速</span>
                     </button>
                 </div>
 
@@ -135,28 +195,52 @@
         </div>
 
         <div class="px-6 py-6 bg-gray-50/70 dark:bg-gray-950/60 border-t border-gray-50 dark:border-gray-800/80 text-center text-xs text-gray-400 dark:text-gray-500 space-y-2.5 pb-12 sm:pb-6 transition-colors duration-500">
-            <p class="text-gray-500 dark:text-gray-400 bg-white/80 dark:bg-gray-800/80 py-1.5 px-3 rounded-xl border border-gray-100 dark:border-gray-700/80 inline-block shadow-sm max-w-full text-left sm:text-center leading-relaxed" id="i18n-tip-box"></p>
-            <p class="px-2" id="i18n-tip-desc"></p>
-            <p class="pt-1 text-[11px] font-medium text-gray-400/80 dark:text-gray-600" id="i18n-tip-legal"></p>
+            <p
+                id="i18n-tip-box"
+                class="text-gray-500 dark:text-gray-400 bg-white/80 dark:bg-gray-800/80 py-1.5 px-3 rounded-xl border border-gray-100 dark:border-gray-700/80 inline-block shadow-sm max-w-full text-left sm:text-center leading-relaxed"
+            ></p>
+
+            <p id="i18n-tip-desc" class="px-2"></p>
+
+            <p id="i18n-tip-legal" class="pt-1 text-[11px] font-medium text-gray-400/80 dark:text-gray-600"></p>
         </div>
     </div>
 
-    <div id="domain-tooltip" class="domain-tooltip" role="tooltip" aria-hidden="true"></div>
+    <div
+        id="domain-tooltip"
+        class="domain-tooltip"
+        role="tooltip"
+        aria-hidden="true"
+    ></div>
 
     <script src="./engine.js"></script>
 
     <script>
         (() => {
-            const localHostnames = new Set(['localhost', '127.0.0.1', '[::1]']);
-            const isLocal = localHostnames.has(location.hostname) || location.protocol === 'file:' || location.protocol === 'content:';
+            const localHostnames = new Set([
+                'localhost',
+                '127.0.0.1',
+                '[::1]'
+            ]);
+
+            const isLocal =
+                localHostnames.has(location.hostname) ||
+                location.protocol === 'file:' ||
+                location.protocol === 'content:';
+
             if (!isLocal && location.protocol === 'http:') {
-                location.replace(`https://${location.host}${location.pathname}${location.search}${location.hash}`);
+                location.replace(
+                    `https://${location.host}${location.pathname}${location.search}${location.hash}`
+                );
             }
         })();
 
         const SCORE = Symbol('AlgorithmicScore');
         const UNAVAILABLE = Number.MAX_SAFE_INTEGER;
-        const isAvailable = ms => Number.isFinite(ms) && ms < UNAVAILABLE;
+
+        const isAvailable = ms =>
+            Number.isFinite(ms) &&
+            ms < UNAVAILABLE;
 
         const PILL_COLOR_MAP = {
             emerald: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400',
@@ -180,11 +264,46 @@
         };
 
         const DEFAULT_LEVELS = [
-            { max: 100, label: { zh: '极速', en: 'Fast' }, color: 'emerald' },
-            { max: 200, label: { zh: '流畅', en: 'Good' }, color: 'teal' },
-            { max: 500, label: { zh: '一般', en: 'Normal' }, color: 'amber' },
-            { max: 1000, label: { zh: '卡顿', en: 'Laggy' }, color: 'orange' },
-            { max: 999999, label: { zh: '很差', en: 'Poor' }, color: 'rose' }
+            {
+                max: 100,
+                label: {
+                    zh: '极速',
+                    en: 'Fast'
+                },
+                color: 'emerald'
+            },
+            {
+                max: 200,
+                label: {
+                    zh: '流畅',
+                    en: 'Good'
+                },
+                color: 'teal'
+            },
+            {
+                max: 500,
+                label: {
+                    zh: '一般',
+                    en: 'Normal'
+                },
+                color: 'amber'
+            },
+            {
+                max: 1000,
+                label: {
+                    zh: '卡顿',
+                    en: 'Laggy'
+                },
+                color: 'orange'
+            },
+            {
+                max: 999999,
+                label: {
+                    zh: '很差',
+                    en: 'Poor'
+                },
+                color: 'rose'
+            }
         ];
 
         let APP_CONFIG = {};
@@ -195,38 +314,67 @@
         let testResults = [];
         let isTesting = false;
 
-        const isZH = (navigator.language || navigator.userLanguage || 'en').toLowerCase().includes('zh');
+        const isZH = (
+            navigator.language ||
+            navigator.userLanguage ||
+            'en'
+        ).toLowerCase().includes('zh');
+
         const langKey = isZH ? 'zh' : 'en';
         const ROW_HEIGHT = 52;
 
-        const container = document.getElementById('lines-container');
-        const retestBtn = document.getElementById('retest-btn');
-        const retestIcon = document.getElementById('retest-icon');
-        const cardStatusText = document.getElementById('card-status-text');
-        const defaultDomainEl = document.getElementById('default-domain');
-        const defaultEntryBtn = document.getElementById('default-entry-btn');
-        const statusHintEl = document.getElementById('status-hint');
-        const domainTooltip = document.getElementById('domain-tooltip');
+        const container =
+            document.getElementById('lines-container');
+
+        const retestBtn =
+            document.getElementById('retest-btn');
+
+        const retestIcon =
+            document.getElementById('retest-icon');
+
+        const cardStatusText =
+            document.getElementById('card-status-text');
+
+        const defaultDomainEl =
+            document.getElementById('default-domain');
+
+        const defaultEntryBtn =
+            document.getElementById('default-entry-btn');
+
+        const statusHintEl =
+            document.getElementById('status-hint');
+
+        const domainTooltip =
+            document.getElementById('domain-tooltip');
 
         let tooltipHideTimer = null;
         let longPressTimer = null;
         let touchStartX = 0;
         let touchStartY = 0;
         let suppressNextRowClick = false;
+        let lastInputWasKeyboard = false;
 
         function clearTooltipHideTimer() {
-            if (tooltipHideTimer) {
-                clearTimeout(tooltipHideTimer);
-                tooltipHideTimer = null;
+            if (!tooltipHideTimer) {
+                return;
             }
+
+            clearTimeout(tooltipHideTimer);
+            tooltipHideTimer = null;
         }
 
         function hideDomainTooltip(immediate = false) {
             clearTooltipHideTimer();
 
             const hide = () => {
-                domainTooltip.classList.remove('is-visible');
-                domainTooltip.setAttribute('aria-hidden', 'true');
+                domainTooltip.classList.remove(
+                    'is-visible'
+                );
+
+                domainTooltip.setAttribute(
+                    'aria-hidden',
+                    'true'
+                );
             };
 
             if (immediate) {
@@ -234,633 +382,1869 @@
                 return;
             }
 
-            tooltipHideTimer = setTimeout(hide, 5000);
+            tooltipHideTimer = setTimeout(
+                hide,
+                5000
+            );
         }
 
         function positionDomainTooltip(anchor) {
-            const anchorRect = anchor.getBoundingClientRect();
-            const tooltipRect = domainTooltip.getBoundingClientRect();
+            const anchorRect =
+                anchor.getBoundingClientRect();
+
+            const tooltipRect =
+                domainTooltip.getBoundingClientRect();
+
             const margin = 12;
 
-            let left = anchorRect.left + (anchorRect.width - tooltipRect.width) / 2;
-            left = Math.max(margin, Math.min(left, window.innerWidth - tooltipRect.width - margin));
+            let left =
+                anchorRect.left +
+                (
+                    anchorRect.width -
+                    tooltipRect.width
+                ) / 2;
 
-            let top = anchorRect.top - tooltipRect.height - 10;
-            if (top < margin) top = anchorRect.bottom + 10;
-            top = Math.max(margin, Math.min(top, window.innerHeight - tooltipRect.height - margin));
+            left = Math.max(
+                margin,
+                Math.min(
+                    left,
+                    window.innerWidth -
+                    tooltipRect.width -
+                    margin
+                )
+            );
 
-            domainTooltip.style.left = `${Math.round(left)}px`;
-            domainTooltip.style.top = `${Math.round(top)}px`;
+            let top =
+                anchorRect.top -
+                tooltipRect.height -
+                10;
+
+            if (top < margin) {
+                top =
+                    anchorRect.bottom +
+                    10;
+            }
+
+            top = Math.max(
+                margin,
+                Math.min(
+                    top,
+                    window.innerHeight -
+                    tooltipRect.height -
+                    margin
+                )
+            );
+
+            domainTooltip.style.left =
+                `${Math.round(left)}px`;
+
+            domainTooltip.style.top =
+                `${Math.round(top)}px`;
         }
 
-        function showDomainTooltip(anchor, fullDomain) {
+        function showDomainTooltip(
+            anchor,
+            fullDomain
+        ) {
             clearTooltipHideTimer();
-            domainTooltip.textContent = fullDomain;
-            domainTooltip.classList.add('is-visible');
-            domainTooltip.setAttribute('aria-hidden', 'false');
+
+            domainTooltip.textContent =
+                fullDomain;
+
+            domainTooltip.classList.add(
+                'is-visible'
+            );
+
+            domainTooltip.setAttribute(
+                'aria-hidden',
+                'false'
+            );
+
             positionDomainTooltip(anchor);
         }
 
         function cancelLongPress() {
-            if (longPressTimer) {
-                clearTimeout(longPressTimer);
-                longPressTimer = null;
+            if (!longPressTimer) {
+                return;
+            }
+
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
+
+        function resetTooltipInteractionState() {
+            cancelLongPress();
+            hideDomainTooltip(true);
+
+            suppressNextRowClick = false;
+
+            const activeElement =
+                document.activeElement;
+
+            if (
+                activeElement instanceof
+                HTMLElement
+            ) {
+                activeElement.blur();
             }
         }
 
-        function bindDomainTooltip(element, fullDomain) {
+        function bindDomainTooltip(
+            element,
+            fullDomain
+        ) {
             element.tabIndex = 0;
-            element.dataset.fullDomain = fullDomain;
-            element.setAttribute('aria-label', fullDomain);
 
-            const getFullDomain = () => element.dataset.fullDomain || fullDomain;
+            element.dataset.fullDomain =
+                fullDomain;
 
-            element.addEventListener('mouseenter', () => {
-                showDomainTooltip(element, getFullDomain());
-            });
+            element.setAttribute(
+                'aria-label',
+                fullDomain
+            );
 
-            element.addEventListener('mouseleave', () => {
-                hideDomainTooltip(false);
-            });
+            const getFullDomain = () =>
+                element.dataset.fullDomain ||
+                fullDomain;
 
-            element.addEventListener('focus', () => {
-                showDomainTooltip(element, getFullDomain());
-            });
+            element.addEventListener(
+                'mouseenter',
+                () => {
+                    showDomainTooltip(
+                        element,
+                        getFullDomain()
+                    );
+                }
+            );
 
-            element.addEventListener('blur', () => {
-                hideDomainTooltip(false);
-            });
+            element.addEventListener(
+                'mouseleave',
+                () => {
+                    hideDomainTooltip(false);
+                }
+            );
 
-            element.addEventListener('touchstart', event => {
-                if (event.touches.length !== 1) return;
+            element.addEventListener(
+                'focus',
+                () => {
+                    if (
+                        lastInputWasKeyboard
+                    ) {
+                        showDomainTooltip(
+                            element,
+                            getFullDomain()
+                        );
+                    }
+                }
+            );
 
-                clearTooltipHideTimer();
-                cancelLongPress();
+            element.addEventListener(
+                'blur',
+                () => {
+                    hideDomainTooltip(false);
+                }
+            );
 
-                touchStartX = event.touches[0].clientX;
-                touchStartY = event.touches[0].clientY;
+            element.addEventListener(
+                'touchstart',
+                event => {
+                    if (
+                        event.touches.length !== 1
+                    ) {
+                        return;
+                    }
 
-                longPressTimer = setTimeout(() => {
-                    longPressTimer = null;
-                    suppressNextRowClick = true;
-                    showDomainTooltip(element, getFullDomain());
-                }, 500);
-            }, { passive: true });
+                    lastInputWasKeyboard =
+                        false;
 
-            element.addEventListener('touchmove', event => {
-                if (event.touches.length !== 1) {
+                    clearTooltipHideTimer();
                     cancelLongPress();
-                    return;
+
+                    touchStartX =
+                        event.touches[0].clientX;
+
+                    touchStartY =
+                        event.touches[0].clientY;
+
+                    longPressTimer =
+                        setTimeout(
+                            () => {
+                                longPressTimer =
+                                    null;
+
+                                suppressNextRowClick =
+                                    true;
+
+                                showDomainTooltip(
+                                    element,
+                                    getFullDomain()
+                                );
+                            },
+                            500
+                        );
+                },
+                {
+                    passive: true
                 }
+            );
 
-                const deltaX = Math.abs(event.touches[0].clientX - touchStartX);
-                const deltaY = Math.abs(event.touches[0].clientY - touchStartY);
+            element.addEventListener(
+                'touchmove',
+                event => {
+                    if (
+                        event.touches.length !== 1
+                    ) {
+                        cancelLongPress();
+                        return;
+                    }
 
-                if (deltaX > 10 || deltaY > 10) cancelLongPress();
-            }, { passive: true });
+                    const deltaX =
+                        Math.abs(
+                            event.touches[0].clientX -
+                            touchStartX
+                        );
 
-            element.addEventListener('touchend', () => {
-                const wasLongPress = longPressTimer === null && domainTooltip.classList.contains('is-visible');
-                cancelLongPress();
-                if (wasLongPress) hideDomainTooltip(false);
-            }, { passive: true });
+                    const deltaY =
+                        Math.abs(
+                            event.touches[0].clientY -
+                            touchStartY
+                        );
 
-            element.addEventListener('touchcancel', () => {
-                cancelLongPress();
-                hideDomainTooltip(false);
-            }, { passive: true });
-
-            element.addEventListener('keydown', event => {
-                if (event.key === 'Escape') {
-                    hideDomainTooltip(true);
-                    element.blur();
+                    if (
+                        deltaX > 10 ||
+                        deltaY > 10
+                    ) {
+                        cancelLongPress();
+                    }
+                },
+                {
+                    passive: true
                 }
-            });
+            );
+
+            element.addEventListener(
+                'touchend',
+                () => {
+                    const wasLongPress =
+                        longPressTimer === null &&
+                        domainTooltip.classList.contains(
+                            'is-visible'
+                        );
+
+                    cancelLongPress();
+
+                    if (wasLongPress) {
+                        hideDomainTooltip(false);
+                    }
+                },
+                {
+                    passive: true
+                }
+            );
+
+            element.addEventListener(
+                'touchcancel',
+                () => {
+                    cancelLongPress();
+                    hideDomainTooltip(false);
+                },
+                {
+                    passive: true
+                }
+            );
+
+            element.addEventListener(
+                'contextmenu',
+                event => {
+                    event.preventDefault();
+                }
+            );
+
+            element.addEventListener(
+                'dragstart',
+                event => {
+                    event.preventDefault();
+                }
+            );
+
+            element.addEventListener(
+                'selectstart',
+                event => {
+                    event.preventDefault();
+                }
+            );
+
+            element.addEventListener(
+                'keydown',
+                event => {
+                    if (
+                        event.key === 'Escape'
+                    ) {
+                        hideDomainTooltip(true);
+                        element.blur();
+                    }
+                }
+            );
         }
 
-        function setEntryEnabled(enabled, url = '#') {
-            defaultEntryBtn.href = enabled ? url : '#';
-            defaultEntryBtn.setAttribute('aria-disabled', String(!enabled));
-            defaultEntryBtn.tabIndex = enabled ? 0 : -1;
-            defaultEntryBtn.classList.toggle('pointer-events-none', !enabled);
-            defaultEntryBtn.classList.toggle('opacity-80', !enabled);
+        function setEntryEnabled(
+            enabled,
+            url = '#'
+        ) {
+            defaultEntryBtn.href =
+                enabled
+                    ? url
+                    : '#';
+
+            defaultEntryBtn.setAttribute(
+                'aria-disabled',
+                String(!enabled)
+            );
+
+            defaultEntryBtn.tabIndex =
+                enabled
+                    ? 0
+                    : -1;
+
+            defaultEntryBtn.classList.toggle(
+                'pointer-events-none',
+                !enabled
+            );
+
+            defaultEntryBtn.classList.toggle(
+                'opacity-80',
+                !enabled
+            );
         }
 
-        function safeLocalizedText(value, fallback = '') {
-            if (typeof value === 'string') return value;
-            if (!value || typeof value !== 'object') return fallback;
-            return String(value[langKey] || value.zh || value.en || fallback);
+        function safeLocalizedText(
+            value,
+            fallback = ''
+        ) {
+            if (
+                typeof value === 'string'
+            ) {
+                return value;
+            }
+
+            if (
+                !value ||
+                typeof value !== 'object'
+            ) {
+                return fallback;
+            }
+
+            return String(
+                value[langKey] ||
+                value.zh ||
+                value.en ||
+                fallback
+            );
         }
 
         function sanitizeLimitedHtml(value) {
-            const template = document.createElement('template');
-            template.innerHTML = typeof value === 'string' ? value : '';
-            const allowedTags = new Set(['B', 'STRONG', 'BR']);
+            const template =
+                document.createElement(
+                    'template'
+                );
+
+            template.innerHTML =
+                typeof value === 'string'
+                    ? value
+                    : '';
+
+            const allowedTags =
+                new Set([
+                    'B',
+                    'STRONG',
+                    'BR'
+                ]);
 
             const cleanNode = node => {
-                for (const child of [...node.childNodes]) {
-                    if (child.nodeType === Node.ELEMENT_NODE) {
-                        if (!allowedTags.has(child.tagName)) {
-                            child.replaceWith(document.createTextNode(child.textContent || ''));
+                for (
+                    const child of
+                    [...node.childNodes]
+                ) {
+                    if (
+                        child.nodeType ===
+                        Node.ELEMENT_NODE
+                    ) {
+                        if (
+                            !allowedTags.has(
+                                child.tagName
+                            )
+                        ) {
+                            child.replaceWith(
+                                document.createTextNode(
+                                    child.textContent ||
+                                    ''
+                                )
+                            );
+
                             continue;
                         }
-                        for (const attribute of [...child.attributes]) {
-                            child.removeAttribute(attribute.name);
+
+                        for (
+                            const attribute of
+                            [...child.attributes]
+                        ) {
+                            child.removeAttribute(
+                                attribute.name
+                            );
                         }
+
                         cleanNode(child);
-                    } else if (child.nodeType !== Node.TEXT_NODE) {
+                    } else if (
+                        child.nodeType !==
+                        Node.TEXT_NODE
+                    ) {
                         child.remove();
                     }
                 }
             };
 
             cleanNode(template.content);
-            return template.content.cloneNode(true);
+
+            return template.content.cloneNode(
+                true
+            );
         }
 
-        function validateRoutes(routeData, protocolMode) {
-            if (!Array.isArray(routeData)) {
-                throw new TypeError('routes.json must contain an array.');
+        function validateRoutes(
+            routeData,
+            protocolMode
+        ) {
+            if (
+                !Array.isArray(routeData)
+            ) {
+                throw new TypeError(
+                    'routes.json must contain an array.'
+                );
             }
 
-            const fallbackProtocol = protocolMode === 'http' ? 'http:' : 'https:';
+            const fallbackProtocol =
+                protocolMode === 'http'
+                    ? 'http:'
+                    : 'https:';
+
             const unique = new Map();
 
-            for (const item of routeData) {
-                if (typeof item !== 'string') continue;
+            for (
+                const item of routeData
+            ) {
+                if (
+                    typeof item !== 'string'
+                ) {
+                    continue;
+                }
+
                 const raw = item.trim();
-                if (!raw) continue;
+
+                if (!raw) {
+                    continue;
+                }
 
                 try {
-                    const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(raw);
-                    const url = new URL(hasScheme ? raw : `${fallbackProtocol}//${raw}`);
-                    if (!['http:', 'https:'].includes(url.protocol)) continue;
-                    if (url.username || url.password) continue;
+                    const hasScheme =
+                        /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(
+                            raw
+                        );
 
-                    const key = url.href.toLowerCase();
-                    if (!unique.has(key)) unique.set(key, raw);
+                    const url = new URL(
+                        hasScheme
+                            ? raw
+                            : `${fallbackProtocol}//${raw}`
+                    );
+
+                    if (
+                        ![
+                            'http:',
+                            'https:'
+                        ].includes(
+                            url.protocol
+                        )
+                    ) {
+                        continue;
+                    }
+
+                    if (
+                        url.username ||
+                        url.password
+                    ) {
+                        continue;
+                    }
+
+                    const key =
+                        url.href.toLowerCase();
+
+                    if (
+                        !unique.has(key)
+                    ) {
+                        unique.set(
+                            key,
+                            raw
+                        );
+                    }
                 } catch (error) {
-                    console.warn('Ignored invalid route:', raw);
+                    console.warn(
+                        'Ignored invalid route:',
+                        raw
+                    );
                 }
             }
 
-            return [...unique.values()];
+            return [
+                ...unique.values()
+            ];
         }
 
         function validateLatencyLevels(levels) {
-            if (!Array.isArray(levels) || levels.length === 0) return DEFAULT_LEVELS;
+            if (
+                !Array.isArray(levels) ||
+                levels.length === 0
+            ) {
+                return DEFAULT_LEVELS;
+            }
 
             const normalized = levels
-                .filter(level => level && Number.isFinite(Number(level.max)))
-                .map(level => ({
-                    max: Math.max(0, Number(level.max)),
-                    label: level.label && typeof level.label === 'object' ? level.label : {},
-                    color: PILL_COLOR_MAP[level.color] ? level.color : 'gray'
-                }))
-                .sort((a, b) => a.max - b.max);
+                .filter(
+                    level =>
+                        level &&
+                        Number.isFinite(
+                            Number(
+                                level.max
+                            )
+                        )
+                )
+                .map(
+                    level => ({
+                        max: Math.max(
+                            0,
+                            Number(
+                                level.max
+                            )
+                        ),
+                        label:
+                            level.label &&
+                            typeof level.label ===
+                            'object'
+                                ? level.label
+                                : {},
+                        color:
+                            PILL_COLOR_MAP[
+                                level.color
+                            ]
+                                ? level.color
+                                : 'gray'
+                    })
+                )
+                .sort(
+                    (a, b) =>
+                        a.max -
+                        b.max
+                );
 
-            return normalized.length > 0 ? normalized : DEFAULT_LEVELS;
+            return normalized.length > 0
+                ? normalized
+                : DEFAULT_LEVELS;
         }
 
         function validateConfig(config) {
-            if (!config || typeof config !== 'object' || Array.isArray(config)) {
-                throw new TypeError('config.json must contain an object.');
+            if (
+                !config ||
+                typeof config !== 'object' ||
+                Array.isArray(config)
+            ) {
+                throw new TypeError(
+                    'config.json must contain an object.'
+                );
             }
 
-            const speedTest = config.speedTest && typeof config.speedTest === 'object'
-                ? config.speedTest
-                : {};
+            const speedTest =
+                config.speedTest &&
+                typeof config.speedTest ===
+                'object'
+                    ? config.speedTest
+                    : {};
 
             return {
                 ...config,
-                title: typeof config.title === 'string' && config.title.trim() ? config.title.trim() : 'Beacon',
-                defaultDomain: typeof config.defaultDomain === 'string' ? config.defaultDomain.trim() : '',
+                title:
+                    typeof config.title ===
+                    'string' &&
+                    config.title.trim()
+                        ? config.title.trim()
+                        : 'Beacon',
+                defaultDomain:
+                    typeof config.defaultDomain ===
+                    'string'
+                        ? config.defaultDomain.trim()
+                        : '',
                 speedTest,
-                latencyLevels: validateLatencyLevels(config.latencyLevels),
-                infoCards: Array.isArray(config.infoCards) ? config.infoCards : []
+                latencyLevels:
+                    validateLatencyLevels(
+                        config.latencyLevels
+                    ),
+                infoCards:
+                    Array.isArray(
+                        config.infoCards
+                    )
+                        ? config.infoCards
+                        : []
             };
         }
 
-        function appendIcon(parent, iconClass) {
-            const icon = document.createElement('i');
-            const safeClasses = String(iconClass || 'fa-solid fa-globe')
-                .split(/\s+/)
-                .filter(className => /^fa[-\w]+$/.test(className));
-            icon.className = safeClasses.length ? safeClasses.join(' ') : 'fa-solid fa-globe';
+        function appendIcon(
+            parent,
+            iconClass
+        ) {
+            const icon =
+                document.createElement(
+                    'i'
+                );
+
+            const safeClasses =
+                String(
+                    iconClass ||
+                    'fa-solid fa-globe'
+                )
+                    .split(/\s+/)
+                    .filter(
+                        className =>
+                            /^fa[-\w]+$/.test(
+                                className
+                            )
+                    );
+
+            icon.className =
+                safeClasses.length
+                    ? safeClasses.join(' ')
+                    : 'fa-solid fa-globe';
+
             parent.appendChild(icon);
         }
 
         function renderInfoCards() {
-            const infoContainer = document.getElementById('info-cards-container');
-            if (!infoContainer) return;
+            const infoContainer =
+                document.getElementById(
+                    'info-cards-container'
+                );
+
+            if (!infoContainer) {
+                return;
+            }
+
             infoContainer.replaceChildren();
 
-            const cards = APP_CONFIG.infoCards.length > 0
-                ? APP_CONFIG.infoCards
-                : [
-                    { iconClass: 'fa-solid fa-globe', title: { zh: '海外访问地址', en: 'Global Access' }, value: '暂无', color: 'blue' },
-                    { iconClass: 'fa-solid fa-bookmark', title: { zh: '永久收藏地址', en: 'Bookmark' }, value: '暂无', color: 'red' }
-                ];
+            const cards =
+                APP_CONFIG.infoCards.length > 0
+                    ? APP_CONFIG.infoCards
+                    : [
+                        {
+                            iconClass:
+                                'fa-solid fa-globe',
+                            title: {
+                                zh: '海外访问地址',
+                                en: 'Global Access'
+                            },
+                            value: '暂无',
+                            color: 'blue'
+                        },
+                        {
+                            iconClass:
+                                'fa-solid fa-bookmark',
+                            title: {
+                                zh: '永久收藏地址',
+                                en: 'Bookmark'
+                            },
+                            value: '暂无',
+                            color: 'red'
+                        }
+                    ];
 
-            const linkColor = typeof APP_THEME.linkColor === 'string'
-                ? APP_THEME.linkColor
-                : 'text-indigo-600 dark:text-indigo-400';
+            const linkColor =
+                typeof APP_THEME.linkColor ===
+                'string'
+                    ? APP_THEME.linkColor
+                    : 'text-indigo-600 dark:text-indigo-400';
 
-            cards.forEach((card, index) => {
-                if (!card || typeof card !== 'object') return;
+            cards.forEach(
+                (card, index) => {
+                    if (
+                        !card ||
+                        typeof card !== 'object'
+                    ) {
+                        return;
+                    }
 
-                if (index > 0) {
-                    const divider = document.createElement('div');
-                    divider.className = 'border-t border-gray-100/80 dark:border-gray-800 my-1';
-                    infoContainer.appendChild(divider);
+                    if (index > 0) {
+                        const divider =
+                            document.createElement(
+                                'div'
+                            );
+
+                        divider.className =
+                            'border-t border-gray-100/80 dark:border-gray-800 my-1';
+
+                        infoContainer.appendChild(
+                            divider
+                        );
+                    }
+
+                    const cardDiv =
+                        document.createElement(
+                            'div'
+                        );
+
+                    cardDiv.className =
+                        'flex items-center gap-4 select-none py-1';
+
+                    const iconBox =
+                        document.createElement(
+                            'div'
+                        );
+
+                    iconBox.className =
+                        `w-11 h-11 rounded-2xl ${
+                            ICON_COLOR_MAP[
+                                card.color
+                            ] ||
+                            ICON_COLOR_MAP.blue
+                        } flex items-center justify-center shrink-0 shadow-sm`;
+
+                    appendIcon(
+                        iconBox,
+                        card.iconClass ||
+                        card.icon
+                    );
+
+                    const textBox =
+                        document.createElement(
+                            'div'
+                        );
+
+                    const title =
+                        document.createElement(
+                            'h4'
+                        );
+
+                    title.className =
+                        'text-sm font-bold text-gray-800 dark:text-gray-200 tracking-wide';
+
+                    title.textContent =
+                        safeLocalizedText(
+                            card.title
+                        );
+
+                    const value =
+                        typeof card.value ===
+                        'string'
+                            ? card.value.trim()
+                            : '';
+
+                    let valueElement;
+
+                    try {
+                        const valueUrl =
+                            new URL(value);
+
+                        if (
+                            ![
+                                'http:',
+                                'https:',
+                                'mailto:'
+                            ].includes(
+                                valueUrl.protocol
+                            )
+                        ) {
+                            throw new Error(
+                                'Unsupported protocol'
+                            );
+                        }
+
+                        valueElement =
+                            document.createElement(
+                                'a'
+                            );
+
+                        valueElement.href =
+                            valueUrl.href;
+
+                        valueElement.target =
+                            '_blank';
+
+                        valueElement.rel =
+                            'noopener noreferrer';
+
+                        valueElement.draggable =
+                            false;
+
+                        valueElement.className =
+                            `${linkColor} text-sm font-semibold mt-0.5 break-all inline-block cursor-pointer`;
+
+                        valueElement.textContent =
+                            value;
+                    } catch (error) {
+                        valueElement =
+                            document.createElement(
+                                'p'
+                            );
+
+                        valueElement.className =
+                            'text-sm font-semibold text-gray-400/70 dark:text-gray-500 mt-0.5 break-all';
+
+                        valueElement.textContent =
+                            value ||
+                            (
+                                isZH
+                                    ? '暂无'
+                                    : 'N/A'
+                            );
+                    }
+
+                    textBox.append(
+                        title,
+                        valueElement
+                    );
+
+                    cardDiv.append(
+                        iconBox,
+                        textBox
+                    );
+
+                    infoContainer.appendChild(
+                        cardDiv
+                    );
                 }
-
-                const cardDiv = document.createElement('div');
-                cardDiv.className = 'flex items-center gap-4 select-none py-1';
-
-                const iconBox = document.createElement('div');
-                iconBox.className = `w-11 h-11 rounded-2xl ${ICON_COLOR_MAP[card.color] || ICON_COLOR_MAP.blue} flex items-center justify-center shrink-0 shadow-sm`;
-                appendIcon(iconBox, card.iconClass || card.icon);
-
-                const textBox = document.createElement('div');
-                const title = document.createElement('h4');
-                title.className = 'text-sm font-bold text-gray-800 dark:text-gray-200 tracking-wide';
-                title.textContent = safeLocalizedText(card.title);
-
-                const value = typeof card.value === 'string' ? card.value.trim() : '';
-                let valueElement;
-
-                try {
-                    const valueUrl = new URL(value);
-                    if (!['http:', 'https:', 'mailto:'].includes(valueUrl.protocol)) throw new Error('Unsupported protocol');
-
-                    valueElement = document.createElement('a');
-                    valueElement.href = valueUrl.href;
-                    valueElement.target = '_blank';
-                    valueElement.rel = 'noopener noreferrer';
-                    valueElement.draggable = false;
-                    valueElement.className = `${linkColor} text-sm font-semibold mt-0.5 break-all inline-block cursor-pointer`;
-                    valueElement.textContent = value;
-                } catch (error) {
-                    valueElement = document.createElement('p');
-                    valueElement.className = 'text-sm font-semibold text-gray-400/70 dark:text-gray-500 mt-0.5 break-all';
-                    valueElement.textContent = value || (isZH ? '暂无' : 'N/A');
-                }
-
-                textBox.append(title, valueElement);
-                cardDiv.append(iconBox, textBox);
-                infoContainer.appendChild(cardDiv);
-            });
+            );
         }
 
-        async function loadJson(path, fallback = null) {
-            const response = await fetch(`${path}?t=${Date.now()}`, { cache: 'no-store' });
-            if (!response.ok) throw new Error(`${path} returned HTTP ${response.status}`);
-            return response.json().catch(() => fallback);
+        async function loadJson(
+            path,
+            fallback = null
+        ) {
+            const response = await fetch(
+                `${path}?t=${Date.now()}`,
+                {
+                    cache: 'no-store'
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    `${path} returned HTTP ${response.status}`
+                );
+            }
+
+            return response
+                .json()
+                .catch(
+                    () => fallback
+                );
         }
 
         async function loadModularJSONs() {
             try {
-                const [configData, routeData, themeData, languageData, announcementData] = await Promise.all([
-                    loadJson('./data/config.json'),
-                    loadJson('./data/routes.json'),
-                    loadJson('./data/theme.json', {}).catch(() => ({})),
-                    loadJson('./data/language.json', {}).catch(() => ({})),
-                    loadJson('./data/announcement.json', {}).catch(() => ({}))
+                const [
+                    configData,
+                    routeData,
+                    themeData,
+                    languageData,
+                    announcementData
+                ] = await Promise.all([
+                    loadJson(
+                        './data/config.json'
+                    ),
+                    loadJson(
+                        './data/routes.json'
+                    ),
+                    loadJson(
+                        './data/theme.json',
+                        {}
+                    ).catch(
+                        () => ({})
+                    ),
+                    loadJson(
+                        './data/language.json',
+                        {}
+                    ).catch(
+                        () => ({})
+                    ),
+                    loadJson(
+                        './data/announcement.json',
+                        {}
+                    ).catch(
+                        () => ({})
+                    )
                 ]);
 
-                APP_CONFIG = validateConfig(configData);
-                APP_THEME = themeData && typeof themeData === 'object' ? themeData : {};
-                domains = validateRoutes(routeData, APP_CONFIG.speedTest.protocolMode);
+                APP_CONFIG =
+                    validateConfig(
+                        configData
+                    );
 
-                if (domains.length === 0) {
-                    throw new Error('No valid routes were found in routes.json.');
+                APP_THEME =
+                    themeData &&
+                    typeof themeData ===
+                    'object'
+                        ? themeData
+                        : {};
+
+                domains =
+                    validateRoutes(
+                        routeData,
+                        APP_CONFIG.speedTest
+                            .protocolMode
+                    );
+
+                if (
+                    domains.length === 0
+                ) {
+                    throw new Error(
+                        'No valid routes were found in routes.json.'
+                    );
                 }
 
-                const langDict = languageData && languageData[langKey] && typeof languageData[langKey] === 'object'
-                    ? languageData[langKey]
-                    : {};
-                const announcementDict = announcementData && announcementData[langKey] && typeof announcementData[langKey] === 'object'
-                    ? announcementData[langKey]
-                    : {};
-                i18n = { ...langDict, ...announcementDict };
+                const langDict =
+                    languageData &&
+                    languageData[langKey] &&
+                    typeof languageData[
+                        langKey
+                    ] === 'object'
+                        ? languageData[
+                            langKey
+                        ]
+                        : {};
 
-                if (typeof APP_THEME.cardGradient === 'string' && APP_THEME.cardGradient.trim()) {
-                    document.getElementById('default-line-card').className = `bg-gradient-to-br ${APP_THEME.cardGradient} rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-purple-600/20 dark:shadow-none flex flex-col items-start border border-white/10 relative overflow-hidden transition-all duration-500`;
+                const announcementDict =
+                    announcementData &&
+                    announcementData[
+                        langKey
+                    ] &&
+                    typeof announcementData[
+                        langKey
+                    ] === 'object'
+                        ? announcementData[
+                            langKey
+                        ]
+                        : {};
+
+                i18n = {
+                    ...langDict,
+                    ...announcementDict
+                };
+
+                if (
+                    typeof APP_THEME.cardGradient ===
+                    'string' &&
+                    APP_THEME.cardGradient.trim()
+                ) {
+                    document.getElementById(
+                        'default-line-card'
+                    ).className =
+                        `bg-gradient-to-br ${APP_THEME.cardGradient} rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-purple-600/20 dark:shadow-none flex flex-col items-start border border-white/10 relative overflow-hidden transition-all duration-500`;
                 }
-                if (typeof APP_THEME.btnColor === 'string' && APP_THEME.btnColor.trim()) {
-                    defaultEntryBtn.className = `w-full ${APP_THEME.btnColor} py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 pointer-events-none opacity-80`;
+
+                if (
+                    typeof APP_THEME.btnColor ===
+                    'string' &&
+                    APP_THEME.btnColor.trim()
+                ) {
+                    defaultEntryBtn.className =
+                        `w-full ${APP_THEME.btnColor} py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 pointer-events-none opacity-80`;
                 }
 
-                document.title = APP_CONFIG.title;
-                document.getElementById('i18n-sub-bold').textContent = i18n.subBold || '智能线路优选';
-                document.getElementById('i18n-sub-text').textContent = i18n.subText || '就绪';
-                document.getElementById('i18n-btn-enter').textContent = i18n.enterBtn || '立即进入';
-                document.getElementById('i18n-list-title').textContent = i18n.listTitle || '全部线路';
-                document.getElementById('i18n-btn-retest').textContent = i18n.retestBtn || '重新测速';
+                document.title =
+                    APP_CONFIG.title;
 
-                const tipBox = document.getElementById('i18n-tip-box');
-                tipBox.replaceChildren(sanitizeLimitedHtml(i18n.tipBox || ''));
-                document.getElementById('i18n-tip-desc').textContent = i18n.tipDesc || '';
-                document.getElementById('i18n-tip-legal').textContent = i18n.tipLegal || '';
+                document.getElementById(
+                    'i18n-sub-bold'
+                ).textContent =
+                    i18n.subBold ||
+                    '智能线路优选';
+
+                document.getElementById(
+                    'i18n-sub-text'
+                ).textContent =
+                    i18n.subText ||
+                    '就绪';
+
+                document.getElementById(
+                    'i18n-btn-enter'
+                ).textContent =
+                    i18n.enterBtn ||
+                    '立即进入';
+
+                document.getElementById(
+                    'i18n-list-title'
+                ).textContent =
+                    i18n.listTitle ||
+                    '全部线路';
+
+                document.getElementById(
+                    'i18n-btn-retest'
+                ).textContent =
+                    i18n.retestBtn ||
+                    '重新测速';
+
+                const tipBox =
+                    document.getElementById(
+                        'i18n-tip-box'
+                    );
+
+                tipBox.replaceChildren(
+                    sanitizeLimitedHtml(
+                        i18n.tipBox ||
+                        ''
+                    )
+                );
+
+                document.getElementById(
+                    'i18n-tip-desc'
+                ).textContent =
+                    i18n.tipDesc ||
+                    '';
+
+                document.getElementById(
+                    'i18n-tip-legal'
+                ).textContent =
+                    i18n.tipLegal ||
+                    '';
 
                 renderInfoCards();
-                retestBtn.classList.remove('pointer-events-none', 'opacity-50');
 
-                const initialDomain = domains.includes(APP_CONFIG.defaultDomain)
-                    ? APP_CONFIG.defaultDomain
-                    : domains[0];
-                updateTopCardDomain(initialDomain);
+                retestBtn.classList.remove(
+                    'pointer-events-none',
+                    'opacity-50'
+                );
+
+                const initialDomain =
+                    domains.includes(
+                        APP_CONFIG.defaultDomain
+                    )
+                        ? APP_CONFIG.defaultDomain
+                        : domains[0];
+
+                updateTopCardDomain(
+                    initialDomain
+                );
+
                 setEntryEnabled(false);
 
-                const speedConfig = APP_CONFIG.speedTest;
-                testerEngine = new BeaconEngine({
-                    timeoutMs: speedConfig.timeout,
-                    concurrency: speedConfig.concurrency,
-                    pingCount: speedConfig.sample,
-                    protocolMode: speedConfig.protocolMode,
-                    probeMode: speedConfig.probeMode,
-                    capabilityTtl: speedConfig.capabilityTtl,
-                    resources: speedConfig.resources,
-                    currentWeight: speedConfig.currentWeight,
-                    historyWeight: speedConfig.historyWeight,
-                    timeoutPenalty: speedConfig.timeoutPenalty
-                });
+                const speedConfig =
+                    APP_CONFIG.speedTest;
+
+                testerEngine =
+                    new BeaconEngine({
+                        timeoutMs:
+                            speedConfig.timeout,
+                        concurrency:
+                            speedConfig.concurrency,
+                        pingCount:
+                            speedConfig.sample,
+                        protocolMode:
+                            speedConfig.protocolMode,
+                        probeMode:
+                            speedConfig.probeMode,
+                        capabilityTtl:
+                            speedConfig.capabilityTtl,
+                        resources:
+                            speedConfig.resources,
+                        currentWeight:
+                            speedConfig.currentWeight,
+                        historyWeight:
+                            speedConfig.historyWeight,
+                        timeoutPenalty:
+                            speedConfig.timeoutPenalty
+                    });
 
                 return true;
             } catch (error) {
-                console.error('Config load failed:', error);
-                cardStatusText.textContent = isZH ? '配置加载失败' : 'Configuration failed';
-                statusHintEl.textContent = isZH
-                    ? '配置读取失败，请检查 data 目录和 JSON 格式'
-                    : 'Failed to load configuration. Check the data folder and JSON syntax.';
+                console.error(
+                    'Config load failed:',
+                    error
+                );
+
+                cardStatusText.textContent =
+                    isZH
+                        ? '配置加载失败'
+                        : 'Configuration failed';
+
+                statusHintEl.textContent =
+                    isZH
+                        ? '配置读取失败，请检查 data 目录和 JSON 格式'
+                        : 'Failed to load configuration. Check the data folder and JSON syntax.';
+
                 setEntryEnabled(false);
+
                 return false;
             }
         }
 
-        function getListFontSizeClass(domain, available) {
-            const baseWeight = available
-                ? 'font-semibold text-gray-800 dark:text-gray-100'
-                : 'font-medium text-gray-400/80 dark:text-gray-500';
+        function getListFontSizeClass(
+            domain,
+            available
+        ) {
+            const baseWeight =
+                available
+                    ? 'font-semibold text-gray-800 dark:text-gray-100'
+                    : 'font-medium text-gray-400/80 dark:text-gray-500';
 
             return `${baseWeight} text-sm sm:text-base truncate whitespace-nowrap transition-all duration-300`;
         }
 
         function updateTopCardDomain(domain) {
-            let displayDomain = String(domain || '');
+            let displayDomain =
+                String(domain || '');
+
             try {
-                const target = testerEngine ? testerEngine.getTargetUrl(displayDomain) : new URL(/^https?:\/\//i.test(displayDomain) ? displayDomain : `https://${displayDomain}`).href;
-                const url = new URL(target);
-                displayDomain = `${url.host}${url.pathname === '/' ? '' : url.pathname}`.replace(/\/$/, '');
+                const target =
+                    testerEngine
+                        ? testerEngine.getTargetUrl(
+                            displayDomain
+                        )
+                        : new URL(
+                            /^https?:\/\//i.test(
+                                displayDomain
+                            )
+                                ? displayDomain
+                                : `https://${displayDomain}`
+                        ).href;
+
+                const url =
+                    new URL(target);
+
+                displayDomain =
+                    `${url.host}${
+                        url.pathname === '/'
+                            ? ''
+                            : url.pathname
+                    }`.replace(
+                        /\/$/,
+                        ''
+                    );
             } catch (error) {
-                displayDomain = displayDomain.replace(/^https?:\/\//i, '').replace(/\/+$/, '');
+                displayDomain =
+                    displayDomain
+                        .replace(
+                            /^https?:\/\//i,
+                            ''
+                        )
+                        .replace(
+                            /\/+$/,
+                            ''
+                        );
             }
 
-            defaultDomainEl.textContent = displayDomain;
-            defaultDomainEl.className = 'font-bold text-xl sm:text-2xl tracking-wide mb-2 w-full truncate transition-all duration-300 cursor-help outline-none focus:ring-2 focus:ring-white/40 rounded-md';
+            defaultDomainEl.textContent =
+                displayDomain;
 
-            if (defaultDomainEl.dataset.tooltipBound !== 'true') {
-                bindDomainTooltip(defaultDomainEl, displayDomain);
-                defaultDomainEl.dataset.tooltipBound = 'true';
+            defaultDomainEl.className =
+                'domain-trigger font-bold text-xl sm:text-2xl tracking-wide mb-2 w-full truncate transition-all duration-300 cursor-help outline-none focus:ring-2 focus:ring-white/40 rounded-md';
+
+            if (
+                defaultDomainEl.dataset
+                    .tooltipBound !==
+                'true'
+            ) {
+                bindDomainTooltip(
+                    defaultDomainEl,
+                    displayDomain
+                );
+
+                defaultDomainEl.dataset
+                    .tooltipBound =
+                    'true';
             }
 
-            defaultDomainEl.dataset.fullDomain = displayDomain;
-            defaultDomainEl.setAttribute('aria-label', displayDomain);
+            defaultDomainEl.dataset
+                .fullDomain =
+                displayDomain;
+
+            defaultDomainEl.setAttribute(
+                'aria-label',
+                displayDomain
+            );
         }
 
         function initListUI() {
-            if (container.children.length !== domains.length) {
+            if (
+                container.children.length !==
+                domains.length
+            ) {
                 container.replaceChildren();
                 testResults = [];
-                container.style.height = `${domains.length * ROW_HEIGHT}px`;
 
-                domains.forEach((domain, index) => {
-                    testResults.push({ domain, ms: undefined, [SCORE]: undefined, index, lastRank: index });
+                container.style.height =
+                    `${domains.length * ROW_HEIGHT}px`;
 
-                    const row = document.createElement('div');
-                    row.id = `line-row-${index}`;
-                    row.className = 'absolute left-0 right-0 h-[48px] flex items-center justify-between px-2 sm:px-3 rounded-xl bg-white dark:bg-gray-800/90 border border-gray-100/40 dark:border-gray-700/50 cursor-pointer opacity-100 gpu-slide';
-                    row.style.transform = `translateY(${index * ROW_HEIGHT}px)`;
+                domains.forEach(
+                    (domain, index) => {
+                        testResults.push({
+                            domain,
+                            ms: undefined,
+                            [SCORE]: undefined,
+                            index,
+                            lastRank: index
+                        });
 
-                    const left = document.createElement('div');
-                    left.className = 'flex items-center gap-2.5 overflow-hidden';
+                        const row =
+                            document.createElement(
+                                'div'
+                            );
 
-                    const badge = document.createElement('div');
-                    badge.id = `badge-${index}`;
-                    badge.className = 'w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 text-xs font-bold flex items-center justify-center shrink-0 transition-all duration-300';
-                    badge.textContent = '-';
+                        row.id =
+                            `line-row-${index}`;
 
-                    const domainText = document.createElement('span');
-                    domainText.id = `domain-text-${index}`;
-                    domainText.className = `${getListFontSizeClass(domain, true)} cursor-help outline-none focus:ring-2 focus:ring-indigo-400/50 rounded-md`;
-                    domainText.textContent = domain;
-                    bindDomainTooltip(domainText, domain);
+                        row.className =
+                            'absolute left-0 right-0 h-[48px] flex items-center justify-between px-2 sm:px-3 rounded-xl bg-white dark:bg-gray-800/90 border border-gray-100/40 dark:border-gray-700/50 cursor-pointer opacity-100 gpu-slide';
 
-                    const pill = document.createElement('div');
-                    pill.id = `pill-${index}`;
-                    pill.className = 'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500 animate-pulse';
-                    pill.textContent = i18n.pillTesting || '● 采集中...';
+                        row.style.transform =
+                            `translateY(${index * ROW_HEIGHT}px)`;
 
-                    left.append(badge, domainText);
-                    row.append(left, pill);
-                    container.appendChild(row);
-                });
+                        const left =
+                            document.createElement(
+                                'div'
+                            );
+
+                        left.className =
+                            'flex items-center gap-2.5 overflow-hidden';
+
+                        const badge =
+                            document.createElement(
+                                'div'
+                            );
+
+                        badge.id =
+                            `badge-${index}`;
+
+                        badge.className =
+                            'w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 text-xs font-bold flex items-center justify-center shrink-0 transition-all duration-300';
+
+                        badge.textContent =
+                            '-';
+
+                        const domainText =
+                            document.createElement(
+                                'span'
+                            );
+
+                        domainText.id =
+                            `domain-text-${index}`;
+
+                        domainText.className =
+                            `domain-trigger ${getListFontSizeClass(
+                                domain,
+                                true
+                            )} cursor-help outline-none focus:ring-2 focus:ring-indigo-400/50 rounded-md`;
+
+                        domainText.textContent =
+                            domain;
+
+                        bindDomainTooltip(
+                            domainText,
+                            domain
+                        );
+
+                        const pill =
+                            document.createElement(
+                                'div'
+                            );
+
+                        pill.id =
+                            `pill-${index}`;
+
+                        pill.className =
+                            'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500 animate-pulse';
+
+                        pill.textContent =
+                            i18n.pillTesting ||
+                            '● 采集中...';
+
+                        left.append(
+                            badge,
+                            domainText
+                        );
+
+                        row.append(
+                            left,
+                            pill
+                        );
+
+                        container.appendChild(
+                            row
+                        );
+                    }
+                );
             } else {
-                testResults.forEach(item => {
-                    item.ms = undefined;
-                    item[SCORE] = undefined;
+                testResults.forEach(
+                    item => {
+                        item.ms =
+                            undefined;
 
-                    const badge = document.getElementById(`badge-${item.index}`);
-                    const pill = document.getElementById(`pill-${item.index}`);
-                    const domainText = document.getElementById(`domain-text-${item.index}`);
-                    const row = document.getElementById(`line-row-${item.index}`);
+                        item[SCORE] =
+                            undefined;
 
-                    if (badge) {
-                        badge.className = 'w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 text-xs font-bold flex items-center justify-center shrink-0 transition-all duration-300';
-                        badge.textContent = '-';
+                        const badge =
+                            document.getElementById(
+                                `badge-${item.index}`
+                            );
+
+                        const pill =
+                            document.getElementById(
+                                `pill-${item.index}`
+                            );
+
+                        const domainText =
+                            document.getElementById(
+                                `domain-text-${item.index}`
+                            );
+
+                        const row =
+                            document.getElementById(
+                                `line-row-${item.index}`
+                            );
+
+                        if (badge) {
+                            badge.className =
+                                'w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 text-xs font-bold flex items-center justify-center shrink-0 transition-all duration-300';
+
+                            badge.textContent =
+                                '-';
+                        }
+
+                        if (pill) {
+                            pill.className =
+                                'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500 animate-pulse';
+
+                            pill.textContent =
+                                i18n.pillTesting ||
+                                '● 采集中...';
+                        }
+
+                        if (domainText) {
+                            domainText.className =
+                                `domain-trigger ${getListFontSizeClass(
+                                    item.domain,
+                                    true
+                                )} cursor-help outline-none focus:ring-2 focus:ring-indigo-400/50 rounded-md`;
+                        }
+
+                        if (row) {
+                            row.onclick =
+                                null;
+
+                            row.style.transform =
+                                `translateY(${item.index * ROW_HEIGHT}px)`;
+                        }
                     }
-                    if (pill) {
-                        pill.className = 'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500 animate-pulse';
-                        pill.textContent = i18n.pillTesting || '● 采集中...';
-                    }
-                    if (domainText) {
-                        domainText.className = `${getListFontSizeClass(item.domain, true)} cursor-help outline-none focus:ring-2 focus:ring-indigo-400/50 rounded-md`;
-                    }
-                    if (row) {
-                        row.onclick = null;
-                        row.style.transform = `translateY(${item.index * ROW_HEIGHT}px)`;
-                    }
-                });
+                );
             }
         }
 
         function updatePillContent(item) {
-            const testing = item.ms === undefined;
-            const available = isAvailable(item.ms);
-            const pill = document.getElementById(`pill-${item.index}`);
-            const domainText = document.getElementById(`domain-text-${item.index}`);
-            if (!pill || !domainText) return;
+            const testing =
+                item.ms === undefined;
 
-            domainText.className = `${getListFontSizeClass(item.domain, !testing && available)} cursor-help outline-none focus:ring-2 focus:ring-indigo-400/50 rounded-md`;
+            const available =
+                isAvailable(item.ms);
+
+            const pill =
+                document.getElementById(
+                    `pill-${item.index}`
+                );
+
+            const domainText =
+                document.getElementById(
+                    `domain-text-${item.index}`
+                );
+
+            if (
+                !pill ||
+                !domainText
+            ) {
+                return;
+            }
+
+            domainText.className =
+                `domain-trigger ${getListFontSizeClass(
+                    item.domain,
+                    !testing &&
+                    available
+                )} cursor-help outline-none focus:ring-2 focus:ring-indigo-400/50 rounded-md`;
 
             let pillClass;
             let pillText;
 
             if (testing) {
-                pillClass = 'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 animate-pulse';
-                pillText = i18n.pillTesting || '● 采集中...';
+                pillClass =
+                    'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 animate-pulse';
+
+                pillText =
+                    i18n.pillTesting ||
+                    '● 采集中...';
             } else if (!available) {
-                pillClass = 'bg-rose-50 dark:bg-rose-950/50 text-rose-400/90 dark:text-rose-400';
-                pillText = i18n.pillOffline || '● 暂不可用';
+                pillClass =
+                    'bg-rose-50 dark:bg-rose-950/50 text-rose-400/90 dark:text-rose-400';
+
+                pillText =
+                    i18n.pillOffline ||
+                    '● 暂不可用';
             } else {
-                const levels = APP_CONFIG.latencyLevels;
-                const matched = levels.find(level => item.ms <= level.max) || levels[levels.length - 1];
-                pillClass = PILL_COLOR_MAP[matched.color] || PILL_COLOR_MAP.gray;
-                pillText = `● ${safeLocalizedText(matched.label)} ${item.ms}ms`;
+                const levels =
+                    APP_CONFIG.latencyLevels;
+
+                const matched =
+                    levels.find(
+                        level =>
+                            item.ms <=
+                            level.max
+                    ) ||
+                    levels[
+                        levels.length - 1
+                    ];
+
+                pillClass =
+                    PILL_COLOR_MAP[
+                        matched.color
+                    ] ||
+                    PILL_COLOR_MAP.gray;
+
+                pillText =
+                    `● ${safeLocalizedText(
+                        matched.label
+                    )} ${item.ms}ms`;
             }
 
-            pill.className = `${pillClass} px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-300`;
-            pill.textContent = pillText;
+            pill.className =
+                `${pillClass} px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-300`;
+
+            pill.textContent =
+                pillText;
         }
 
         function finalSortAndRender() {
-            const sorted = [...testResults].sort((a, b) => {
-                const scoreA = a[SCORE] ?? UNAVAILABLE;
-                const scoreB = b[SCORE] ?? UNAVAILABLE;
-                return scoreA === scoreB ? a.lastRank - b.lastRank : scoreA - scoreB;
-            });
+            const sorted =
+                [...testResults].sort(
+                    (a, b) => {
+                        const scoreA =
+                            a[SCORE] ??
+                            UNAVAILABLE;
+
+                        const scoreB =
+                            b[SCORE] ??
+                            UNAVAILABLE;
+
+                        return scoreA ===
+                            scoreB
+                                ? a.lastRank -
+                                    b.lastRank
+                                : scoreA -
+                                    scoreB;
+                    }
+                );
 
             let rank = 1;
 
-            sorted.forEach((item, sortedIndex) => {
-                item.lastRank = sortedIndex;
-                const row = document.getElementById(`line-row-${item.index}`);
-                const badge = document.getElementById(`badge-${item.index}`);
-                if (!row || !badge) return;
+            sorted.forEach(
+                (item, sortedIndex) => {
+                    item.lastRank =
+                        sortedIndex;
 
-                row.style.transform = `translateY(${sortedIndex * ROW_HEIGHT}px)`;
-                const available = isAvailable(item.ms);
+                    const row =
+                        document.getElementById(
+                            `line-row-${item.index}`
+                        );
 
-                if (available) {
-                    badge.className = 'w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 text-xs font-extrabold flex items-center justify-center shrink-0 transition-all duration-300';
-                    badge.textContent = String(rank++);
-                } else {
-                    badge.className = 'w-8 h-8 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-300 dark:text-gray-600 text-xs font-extrabold flex items-center justify-center shrink-0 transition-all duration-300';
-                    badge.textContent = '-';
+                    const badge =
+                        document.getElementById(
+                            `badge-${item.index}`
+                        );
+
+                    if (
+                        !row ||
+                        !badge
+                    ) {
+                        return;
+                    }
+
+                    row.style.transform =
+                        `translateY(${sortedIndex * ROW_HEIGHT}px)`;
+
+                    const available =
+                        isAvailable(
+                            item.ms
+                        );
+
+                    if (available) {
+                        badge.className =
+                            'w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 text-xs font-extrabold flex items-center justify-center shrink-0 transition-all duration-300';
+
+                        badge.textContent =
+                            String(rank++);
+                    } else {
+                        badge.className =
+                            'w-8 h-8 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-300 dark:text-gray-600 text-xs font-extrabold flex items-center justify-center shrink-0 transition-all duration-300';
+
+                        badge.textContent =
+                            '-';
+                    }
+
+                    row.onclick =
+                        event => {
+                            if (
+                                suppressNextRowClick
+                            ) {
+                                suppressNextRowClick =
+                                    false;
+
+                                event.preventDefault();
+
+                                return;
+                            }
+
+                            if (
+                                item.ms ===
+                                undefined
+                            ) {
+                                return;
+                            }
+
+                            if (!available) {
+                                alert(
+                                    i18n.alertOffline ||
+                                    '❌ 该线路暂不可用'
+                                );
+
+                                return;
+                            }
+
+                            resetTooltipInteractionState();
+
+                            const popup =
+                                window.open(
+                                    testerEngine.getTargetUrl(
+                                        item.domain
+                                    ),
+                                    '_blank',
+                                    'noopener,noreferrer'
+                                );
+
+                            if (popup) {
+                                popup.opener =
+                                    null;
+                            }
+                        };
                 }
-
-                row.onclick = event => {
-                    if (suppressNextRowClick) {
-                        suppressNextRowClick = false;
-                        event.preventDefault();
-                        return;
-                    }
-
-                    if (item.ms === undefined) return;
-                    if (!available) {
-                        alert(i18n.alertOffline || '❌ 该线路暂不可用');
-                        return;
-                    }
-
-                    const popup = window.open(testerEngine.getTargetUrl(item.domain), '_blank', 'noopener,noreferrer');
-                    if (popup) popup.opener = null;
-                };
-            });
+            );
         }
 
         async function startSpeedTest() {
-            if (!testerEngine || isTesting) return;
-            isTesting = true;
-            testerEngine.cancelCurrentRun();
-
-            retestBtn.disabled = true;
-            retestBtn.classList.add('opacity-50', 'pointer-events-none');
-            retestIcon.classList.add('animate-spin');
-            setEntryEnabled(false);
-            initListUI();
-
-            document.getElementById('i18n-sub-text').textContent = i18n.subText || '动态路由测速中...';
-            cardStatusText.textContent = i18n.statusTesting || '正在检测线路延迟...';
-            statusHintEl.textContent = i18n.hintLoading || '正在获取测速结果...';
-
-            let availableCount = 0;
-
-            const onProgress = (index, currentMedian) => {
-                const domain = domains[index];
-                testResults[index].ms = currentMedian;
-                testResults[index][SCORE] = testerEngine.getScore(domain, currentMedian);
-                if (isAvailable(currentMedian)) availableCount += 1;
-                updatePillContent(testResults[index]);
-            };
-
-            try {
-                await testerEngine.runPool(domains, onProgress);
-                finalSortAndRender();
-
-                const validNodes = testResults
-                    .filter(result => isAvailable(result.ms) && Number.isFinite(result[SCORE]))
-                    .sort((a, b) => a[SCORE] - b[SCORE]);
-
-                if (validNodes.length > 0) {
-                    const bestNode = validNodes[0];
-                    updateTopCardDomain(bestNode.domain);
-                    setEntryEnabled(true, testerEngine.getTargetUrl(bestNode.domain));
-                    document.getElementById('i18n-sub-text').textContent = i18n.statusDone || '最佳线路已就绪';
-                    cardStatusText.textContent = i18n.statusFound || '已选择当前最优线路';
-                    statusHintEl.textContent = isZH
-                        ? `共 ${availableCount}/${domains.length} 条可用网络`
-                        : `${availableCount}/${domains.length} networks available`;
-                } else {
-                    setEntryEnabled(false);
-                    defaultDomainEl.textContent = isZH ? '暂无可用线路' : 'No route available';
-                    document.getElementById('i18n-sub-text').textContent = isZH ? '测速完成' : 'Test completed';
-                    cardStatusText.textContent = isZH ? '未找到可用线路' : 'No available route';
-                    statusHintEl.textContent = isZH
-                        ? '所有线路均未通过当前浏览器的网络探测，请稍后重试'
-                        : 'All routes failed the current browser probe. Please retry later.';
-                }
-            } catch (error) {
-                console.error('Speed test failed:', error);
-                setEntryEnabled(false);
-                cardStatusText.textContent = isZH ? '测速发生错误' : 'Speed test failed';
-                statusHintEl.textContent = isZH ? '请重新测速或检查浏览器控制台' : 'Please retry or inspect the browser console.';
-            } finally {
-                isTesting = false;
-                retestBtn.disabled = false;
-                retestBtn.classList.remove('opacity-50', 'pointer-events-none');
-                retestIcon.classList.remove('animate-spin');
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            if (typeof BeaconEngine === 'undefined') {
-                statusHintEl.textContent = isZH ? 'Engine 缺失（engine.js 未加载）' : 'engine.js is missing.';
+            if (
+                !testerEngine ||
+                isTesting
+            ) {
                 return;
             }
 
-            const ready = await loadModularJSONs();
-            if (ready) startSpeedTest();
-        });
+            isTesting = true;
 
-        document.addEventListener('pointerdown', event => {
-            if (!event.target.closest('[data-full-domain]')) {
+            testerEngine.cancelCurrentRun();
+
+            retestBtn.disabled =
+                true;
+
+            retestBtn.classList.add(
+                'opacity-50',
+                'pointer-events-none'
+            );
+
+            retestIcon.classList.add(
+                'animate-spin'
+            );
+
+            setEntryEnabled(false);
+            initListUI();
+
+            document.getElementById(
+                'i18n-sub-text'
+            ).textContent =
+                i18n.subText ||
+                '动态路由测速中...';
+
+            cardStatusText.textContent =
+                i18n.statusTesting ||
+                '正在检测线路延迟...';
+
+            statusHintEl.textContent =
+                i18n.hintLoading ||
+                '正在获取测速结果...';
+
+            let availableCount = 0;
+
+            const onProgress = (
+                index,
+                currentMedian
+            ) => {
+                const domain =
+                    domains[index];
+
+                testResults[index].ms =
+                    currentMedian;
+
+                testResults[index][SCORE] =
+                    testerEngine.getScore(
+                        domain,
+                        currentMedian
+                    );
+
+                if (
+                    isAvailable(
+                        currentMedian
+                    )
+                ) {
+                    availableCount += 1;
+                }
+
+                updatePillContent(
+                    testResults[index]
+                );
+            };
+
+            try {
+                await testerEngine.runPool(
+                    domains,
+                    onProgress
+                );
+
+                finalSortAndRender();
+
+                const validNodes =
+                    testResults
+                        .filter(
+                            result =>
+                                isAvailable(
+                                    result.ms
+                                ) &&
+                                Number.isFinite(
+                                    result[SCORE]
+                                )
+                        )
+                        .sort(
+                            (a, b) =>
+                                a[SCORE] -
+                                b[SCORE]
+                        );
+
+                if (
+                    validNodes.length > 0
+                ) {
+                    const bestNode =
+                        validNodes[0];
+
+                    updateTopCardDomain(
+                        bestNode.domain
+                    );
+
+                    setEntryEnabled(
+                        true,
+                        testerEngine.getTargetUrl(
+                            bestNode.domain
+                        )
+                    );
+
+                    document.getElementById(
+                        'i18n-sub-text'
+                    ).textContent =
+                        i18n.statusDone ||
+                        '最佳线路已就绪';
+
+                    cardStatusText.textContent =
+                        i18n.statusFound ||
+                        '已选择当前最优线路';
+
+                    statusHintEl.textContent =
+                        isZH
+                            ? `共 ${availableCount}/${domains.length} 条可用网络`
+                            : `${availableCount}/${domains.length} networks available`;
+                } else {
+                    setEntryEnabled(false);
+
+                    defaultDomainEl.textContent =
+                        isZH
+                            ? '暂无可用线路'
+                            : 'No route available';
+
+                    document.getElementById(
+                        'i18n-sub-text'
+                    ).textContent =
+                        isZH
+                            ? '测速完成'
+                            : 'Test completed';
+
+                    cardStatusText.textContent =
+                        isZH
+                            ? '未找到可用线路'
+                            : 'No available route';
+
+                    statusHintEl.textContent =
+                        isZH
+                            ? '所有线路均未通过当前浏览器的网络探测，请稍后重试'
+                            : 'All routes failed the current browser probe. Please retry later.';
+                }
+            } catch (error) {
+                console.error(
+                    'Speed test failed:',
+                    error
+                );
+
+                setEntryEnabled(false);
+
+                cardStatusText.textContent =
+                    isZH
+                        ? '测速发生错误'
+                        : 'Speed test failed';
+
+                statusHintEl.textContent =
+                    isZH
+                        ? '请重新测速或检查浏览器控制台'
+                        : 'Please retry or inspect the browser console.';
+            } finally {
+                isTesting = false;
+
+                retestBtn.disabled =
+                    false;
+
+                retestBtn.classList.remove(
+                    'opacity-50',
+                    'pointer-events-none'
+                );
+
+                retestIcon.classList.remove(
+                    'animate-spin'
+                );
+            }
+        }
+
+        window.addEventListener(
+            'DOMContentLoaded',
+            async () => {
+                if (
+                    typeof BeaconEngine ===
+                    'undefined'
+                ) {
+                    statusHintEl.textContent =
+                        isZH
+                            ? 'Engine 缺失（engine.js 未加载）'
+                            : 'engine.js is missing.';
+
+                    return;
+                }
+
+                const ready =
+                    await loadModularJSONs();
+
+                if (ready) {
+                    startSpeedTest();
+                }
+            }
+        );
+
+        document.addEventListener(
+            'keydown',
+            event => {
+                if (
+                    event.key === 'Tab'
+                ) {
+                    lastInputWasKeyboard =
+                        true;
+                }
+            },
+            true
+        );
+
+        document.addEventListener(
+            'pointerdown',
+            event => {
+                lastInputWasKeyboard =
+                    false;
+
+                if (
+                    !event.target.closest(
+                        '[data-full-domain]'
+                    )
+                ) {
+                    hideDomainTooltip(true);
+                }
+            },
+            true
+        );
+
+        window.addEventListener(
+            'resize',
+            () => {
                 hideDomainTooltip(true);
             }
-        });
+        );
 
-        window.addEventListener('resize', () => hideDomainTooltip(true));
-        window.addEventListener('scroll', () => hideDomainTooltip(true), true);
+        window.addEventListener(
+            'scroll',
+            () => {
+                hideDomainTooltip(true);
+            },
+            true
+        );
 
-        window.addEventListener('pagehide', () => {
-            if (testerEngine) testerEngine.destroy();
-        });
+        window.addEventListener(
+            'pageshow',
+            () => {
+                resetTooltipInteractionState();
 
-        defaultEntryBtn.addEventListener('click', event => {
-            if (defaultEntryBtn.getAttribute('aria-disabled') === 'true') event.preventDefault();
-        });
+                lastInputWasKeyboard =
+                    false;
+            }
+        );
 
-        retestBtn.addEventListener('click', startSpeedTest);
+        document.addEventListener(
+            'visibilitychange',
+            () => {
+                if (document.hidden) {
+                    resetTooltipInteractionState();
+                }
+            }
+        );
+
+        window.addEventListener(
+            'pagehide',
+            () => {
+                resetTooltipInteractionState();
+
+                if (testerEngine) {
+                    testerEngine.destroy();
+                }
+            }
+        );
+
+        defaultEntryBtn.addEventListener(
+            'click',
+            event => {
+                if (
+                    defaultEntryBtn.getAttribute(
+                        'aria-disabled'
+                    ) === 'true'
+                ) {
+                    event.preventDefault();
+                    return;
+                }
+
+                resetTooltipInteractionState();
+            }
+        );
+
+        retestBtn.addEventListener(
+            'click',
+            startSpeedTest
+        );
     </script>
 </body>
 </html>
