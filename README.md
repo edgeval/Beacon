@@ -1,5 +1,8 @@
-Beacon
+# Beacon
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
+A lightweight, browser-based smart route selection portal.
 A lightweight, browser-based smart route selection portal.
 
 Beacon measures the availability and latency of multiple HTTP or HTTPS endpoints directly in the visitor’s browser, ranks them using current and historical results, and recommends the best available route.
