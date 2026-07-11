@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https: http:; img-src 'self' https: data:; style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com data:;">
     <title>Beacon · Gateway Portal</title>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.2"></script>
-    
+
     <style>
         body {
             background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
@@ -40,7 +40,6 @@
             transition: transform 1.2s ease-in-out, opacity 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
             will-change: transform;
         }
-        /* 🛡️ 10/10 黄金毕业版：禁止链接拖拽破坏布局，同时完美保留长按复制与原生呼出菜单能力 */
         a {
             -webkit-user-drag: none;
             -webkit-touch-callout: default;
@@ -50,7 +49,7 @@
 <body class="min-h-screen flex items-center justify-center p-0 sm:p-6 text-gray-800 dark:text-gray-100">
 
     <div class="w-full max-w-xl min-h-screen sm:min-h-0 bg-white dark:bg-gray-900/90 sm:rounded-3xl shadow-none sm:shadow-2xl border-0 sm:border border-gray-100 dark:border-gray-800 overflow-hidden transition-colors duration-500">
-        
+
         <div class="p-6 sm:p-8 border-b border-gray-50 dark:border-gray-800/80 bg-gradient-to-b from-blue-50/40 dark:from-indigo-950/20 to-transparent pt-12 sm:pt-10 flex flex-col items-center">
             <div class="flex items-center gap-3 mb-2.5">
                 <i id="theme-accent-icon" class="fa-solid fa-bolt-lightning text-2xl sm:text-3xl text-indigo-600 dark:text-indigo-400 animate-pulse"></i>
@@ -62,10 +61,10 @@
         </div>
 
         <div class="p-6 sm:p-8 space-y-6">
-            
+
             <div id="default-line-card" class="bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 dark:from-indigo-700 dark:via-purple-700 dark:to-violet-800 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-purple-600/20 dark:shadow-none flex flex-col items-start border border-white/10 relative overflow-hidden transition-all duration-500">
                 <div class="absolute -top-12 -right-12 w-44 h-44 bg-white/5 rounded-full pointer-events-none"></div>
-                
+
                 <div class="bg-white/15 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-medium text-white/95 mb-5 flex items-center gap-1.5 shadow-inner">
                     <i class="fa-solid fa-bolt-lightning text-[10px]"></i>
                     <span id="card-status-text">系统未就绪</span>
@@ -77,8 +76,8 @@
                     等待 data 加载
                 </p>
 
-                <a id="default-entry-btn" href="#" target="_blank" draggable="false" class="w-full bg-white dark:bg-gray-100 text-purple-700 dark:text-purple-900 py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 pointer-events-none opacity-80">
-                    <span id="i18n-btn-enter">等待配置</span> 
+                <a id="default-entry-btn" href="#" target="_blank" rel="noopener noreferrer" draggable="false" aria-disabled="true" tabindex="-1" class="w-full bg-white dark:bg-gray-100 text-purple-700 dark:text-purple-900 py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 pointer-events-none opacity-80">
+                    <span id="i18n-btn-enter">等待配置</span>
                     <i class="fa-solid fa-arrow-right text-sm"></i>
                 </a>
             </div>
@@ -88,21 +87,19 @@
                     <span class="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                         <i class="fa-solid fa-list-ol"></i> <span id="i18n-list-title">全部线路</span>
                     </span>
-                    <button id="retest-btn" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 transition-colors px-2 py-1 rounded-md pointer-events-none opacity-50">
+                    <button id="retest-btn" type="button" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 transition-colors px-2 py-1 rounded-md pointer-events-none opacity-50">
                         <i id="retest-icon" class="fa-solid fa-arrows-rotate"></i> <span id="i18n-btn-retest">重新测速</span>
                     </button>
                 </div>
 
                 <div class="bg-gray-50/40 dark:bg-gray-950/50 rounded-2xl p-2 border border-gray-100/60 dark:border-gray-800/80 overflow-hidden">
                     <div class="max-h-[260px] overflow-y-auto pr-1.5 custom-scrollbar">
-                        <div id="lines-container" class="relative w-full">
-                            </div>
+                        <div id="lines-container" class="relative w-full"></div>
                     </div>
                 </div>
             </div>
 
-            <div id="info-cards-container" class="bg-gray-50/50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800/80 rounded-3xl p-5 space-y-5 shadow-sm transition-colors duration-500">
-                </div>
+            <div id="info-cards-container" class="bg-gray-50/50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800/80 rounded-3xl p-5 space-y-5 shadow-sm transition-colors duration-500"></div>
         </div>
 
         <div class="px-6 py-6 bg-gray-50/70 dark:bg-gray-950/60 border-t border-gray-50 dark:border-gray-800/80 text-center text-xs text-gray-400 dark:text-gray-500 space-y-2.5 pb-12 sm:pb-6 transition-colors duration-500">
@@ -115,55 +112,58 @@
     <script src="./engine.js"></script>
 
     <script>
-        (function() {
-            if (location.hostname.includes('127.0.0.1') || location.hostname.includes('localhost') || location.protocol === 'file:' || location.protocol === 'content:') return;
-            if (location.protocol === 'http:') {
-                if (sessionStorage.getItem('secure_redirect_active')) {
-                    sessionStorage.removeItem('secure_redirect_active');
-                    document.documentElement.innerHTML = ''; document.open();
-                    document.write('<html><head><title>404 Not Found</title></head><body bgcolor="white"><center><h1>404 Not Found</h1></center><hr><center>nginx</center></body></html>');
-                    document.close(); window.stop(); throw new Error("404");
-                } else {
-                    sessionStorage.setItem('secure_redirect_active', 'true');
-                    location.replace('https:' + window.location.href.substring(window.location.protocol.length));
-                }
-            } else if (location.protocol === 'https:') {
-                sessionStorage.removeItem('secure_redirect_active');
+        (() => {
+            const localHostnames = new Set(['localhost', '127.0.0.1', '[::1]']);
+            const isLocal = localHostnames.has(location.hostname) || location.protocol === 'file:' || location.protocol === 'content:';
+            if (!isLocal && location.protocol === 'http:') {
+                location.replace(`https://${location.host}${location.pathname}${location.search}${location.hash}`);
             }
         })();
 
-        const _v = Symbol('AlgorithmicScore'); 
-        const isAvailable = (ms) => ms !== undefined && ms < Number.MAX_SAFE_INTEGER;
+        const SCORE = Symbol('AlgorithmicScore');
+        const UNAVAILABLE = Number.MAX_SAFE_INTEGER;
+        const isAvailable = ms => Number.isFinite(ms) && ms < UNAVAILABLE;
 
         const PILL_COLOR_MAP = {
-            emerald: "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400",
-            teal: "bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400",
-            amber: "bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400",
-            orange: "bg-orange-50 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400",
-            rose: "bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400",
-            blue: "bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400",
-            purple: "bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400",
-            gray: "bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400"
+            emerald: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400',
+            teal: 'bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400',
+            amber: 'bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400',
+            orange: 'bg-orange-50 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400',
+            rose: 'bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400',
+            blue: 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400',
+            purple: 'bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400',
+            gray: 'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400'
         };
 
         const ICON_COLOR_MAP = {
-            blue: "bg-blue-50 dark:bg-blue-950/50 text-blue-500 dark:text-blue-400",
-            red: "bg-red-50 dark:bg-red-950/50 text-red-500 dark:text-red-400",
-            emerald: "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-500 dark:text-emerald-400",
-            purple: "bg-purple-50 dark:bg-purple-950/50 text-purple-500 dark:text-purple-400",
-            orange: "bg-orange-50 dark:bg-orange-950/50 text-orange-500 dark:text-orange-400",
-            sky: "bg-sky-50 dark:bg-sky-950/50 text-sky-500 dark:text-sky-400",
-            gray: "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
+            blue: 'bg-blue-50 dark:bg-blue-950/50 text-blue-500 dark:text-blue-400',
+            red: 'bg-red-50 dark:bg-red-950/50 text-red-500 dark:text-red-400',
+            emerald: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-500 dark:text-emerald-400',
+            purple: 'bg-purple-50 dark:bg-purple-950/50 text-purple-500 dark:text-purple-400',
+            orange: 'bg-orange-50 dark:bg-orange-950/50 text-orange-500 dark:text-orange-400',
+            sky: 'bg-sky-50 dark:bg-sky-950/50 text-sky-500 dark:text-sky-400',
+            gray: 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'
         };
+
+        const DEFAULT_LEVELS = [
+            { max: 100, label: { zh: '极速', en: 'Fast' }, color: 'emerald' },
+            { max: 200, label: { zh: '流畅', en: 'Good' }, color: 'teal' },
+            { max: 500, label: { zh: '一般', en: 'Normal' }, color: 'amber' },
+            { max: 1000, label: { zh: '卡顿', en: 'Laggy' }, color: 'orange' },
+            { max: 999999, label: { zh: '很差', en: 'Poor' }, color: 'rose' }
+        ];
 
         let APP_CONFIG = {};
         let APP_THEME = {};
         let i18n = {};
         let domains = [];
-        let testerEngine = null; 
-        
-        const isZH = (navigator.language || navigator.userLanguage).toLowerCase().includes('zh');
+        let testerEngine = null;
+        let testResults = [];
+        let isTesting = false;
+
+        const isZH = (navigator.language || navigator.userLanguage || 'en').toLowerCase().includes('zh');
         const langKey = isZH ? 'zh' : 'en';
+        const ROW_HEIGHT = 52;
 
         const container = document.getElementById('lines-container');
         const retestBtn = document.getElementById('retest-btn');
@@ -173,106 +173,246 @@
         const defaultEntryBtn = document.getElementById('default-entry-btn');
         const statusHintEl = document.getElementById('status-hint');
 
-        const ROW_HEIGHT = 52; 
-        let testResults = [];
+        function setEntryEnabled(enabled, url = '#') {
+            defaultEntryBtn.href = enabled ? url : '#';
+            defaultEntryBtn.setAttribute('aria-disabled', String(!enabled));
+            defaultEntryBtn.tabIndex = enabled ? 0 : -1;
+            defaultEntryBtn.classList.toggle('pointer-events-none', !enabled);
+            defaultEntryBtn.classList.toggle('opacity-80', !enabled);
+        }
 
-        // 🌟 10/10 黄金毕业版：无hover零悬停、防拖拽、正则拆分、主题解耦
+        function safeLocalizedText(value, fallback = '') {
+            if (typeof value === 'string') return value;
+            if (!value || typeof value !== 'object') return fallback;
+            return String(value[langKey] || value.zh || value.en || fallback);
+        }
+
+        function sanitizeLimitedHtml(value) {
+            const template = document.createElement('template');
+            template.innerHTML = typeof value === 'string' ? value : '';
+            const allowedTags = new Set(['B', 'STRONG', 'BR']);
+
+            const cleanNode = node => {
+                for (const child of [...node.childNodes]) {
+                    if (child.nodeType === Node.ELEMENT_NODE) {
+                        if (!allowedTags.has(child.tagName)) {
+                            child.replaceWith(document.createTextNode(child.textContent || ''));
+                            continue;
+                        }
+                        for (const attribute of [...child.attributes]) {
+                            child.removeAttribute(attribute.name);
+                        }
+                        cleanNode(child);
+                    } else if (child.nodeType !== Node.TEXT_NODE) {
+                        child.remove();
+                    }
+                }
+            };
+
+            cleanNode(template.content);
+            return template.content.cloneNode(true);
+        }
+
+        function validateRoutes(routeData, protocolMode) {
+            if (!Array.isArray(routeData)) {
+                throw new TypeError('routes.json must contain an array.');
+            }
+
+            const fallbackProtocol = protocolMode === 'http' ? 'http:' : 'https:';
+            const unique = new Map();
+
+            for (const item of routeData) {
+                if (typeof item !== 'string') continue;
+                const raw = item.trim();
+                if (!raw) continue;
+
+                try {
+                    const hasScheme = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(raw);
+                    const url = new URL(hasScheme ? raw : `${fallbackProtocol}//${raw}`);
+                    if (!['http:', 'https:'].includes(url.protocol)) continue;
+                    if (url.username || url.password) continue;
+
+                    const key = url.href.toLowerCase();
+                    if (!unique.has(key)) unique.set(key, raw);
+                } catch (error) {
+                    console.warn('Ignored invalid route:', raw);
+                }
+            }
+
+            return [...unique.values()];
+        }
+
+        function validateLatencyLevels(levels) {
+            if (!Array.isArray(levels) || levels.length === 0) return DEFAULT_LEVELS;
+
+            const normalized = levels
+                .filter(level => level && Number.isFinite(Number(level.max)))
+                .map(level => ({
+                    max: Math.max(0, Number(level.max)),
+                    label: level.label && typeof level.label === 'object' ? level.label : {},
+                    color: PILL_COLOR_MAP[level.color] ? level.color : 'gray'
+                }))
+                .sort((a, b) => a.max - b.max);
+
+            return normalized.length > 0 ? normalized : DEFAULT_LEVELS;
+        }
+
+        function validateConfig(config) {
+            if (!config || typeof config !== 'object' || Array.isArray(config)) {
+                throw new TypeError('config.json must contain an object.');
+            }
+
+            const speedTest = config.speedTest && typeof config.speedTest === 'object'
+                ? config.speedTest
+                : {};
+
+            return {
+                ...config,
+                title: typeof config.title === 'string' && config.title.trim() ? config.title.trim() : 'Beacon',
+                defaultDomain: typeof config.defaultDomain === 'string' ? config.defaultDomain.trim() : '',
+                speedTest,
+                latencyLevels: validateLatencyLevels(config.latencyLevels),
+                infoCards: Array.isArray(config.infoCards) ? config.infoCards : []
+            };
+        }
+
+        function appendIcon(parent, iconClass) {
+            const icon = document.createElement('i');
+            const safeClasses = String(iconClass || 'fa-solid fa-globe')
+                .split(/\s+/)
+                .filter(className => /^fa[-\w]+$/.test(className));
+            icon.className = safeClasses.length ? safeClasses.join(' ') : 'fa-solid fa-globe';
+            parent.appendChild(icon);
+        }
+
         function renderInfoCards() {
             const infoContainer = document.getElementById('info-cards-container');
             if (!infoContainer) return;
-            infoContainer.innerHTML = '';
+            infoContainer.replaceChildren();
 
-            const cards = APP_CONFIG.infoCards || [
-                { iconClass: "fa-solid fa-globe", title: { zh: "海外访问地址", en: "Global Access" }, value: APP_CONFIG.globalUrl || "暂无", color: "blue" },
-                { iconClass: "fa-solid fa-bookmark", title: { zh: "永久收藏地址", en: "Bookmark" }, value: APP_CONFIG.bookmarkUrl || "暂无", color: "red" }
-            ];
+            const cards = APP_CONFIG.infoCards.length > 0
+                ? APP_CONFIG.infoCards
+                : [
+                    { iconClass: 'fa-solid fa-globe', title: { zh: '海外访问地址', en: 'Global Access' }, value: '暂无', color: 'blue' },
+                    { iconClass: 'fa-solid fa-bookmark', title: { zh: '永久收藏地址', en: 'Bookmark' }, value: '暂无', color: 'red' }
+                ];
 
-            const linkColor = APP_THEME.linkColor || "text-indigo-600 dark:text-indigo-400";
+            const linkColor = typeof APP_THEME.linkColor === 'string'
+                ? APP_THEME.linkColor
+                : 'text-indigo-600 dark:text-indigo-400';
 
-            cards.forEach((card, idx) => {
-                if (idx > 0) {
+            cards.forEach((card, index) => {
+                if (!card || typeof card !== 'object') return;
+
+                if (index > 0) {
                     const divider = document.createElement('div');
-                    divider.className = "border-t border-gray-100/80 dark:border-gray-800 my-1";
+                    divider.className = 'border-t border-gray-100/80 dark:border-gray-800 my-1';
                     infoContainer.appendChild(divider);
                 }
 
-                const iconColor = ICON_COLOR_MAP[card.color] || ICON_COLOR_MAP.blue;
-                const titleText = card.title ? (card.title[langKey] || card.title.zh || "") : "";
-                const valueText = card.value || "暂无";
-                const iconFullClass = card.iconClass || `fa-solid ${card.icon || 'fa-globe'}`;
-
-                const isLink = 
-                    /^https?:\/\//i.test(valueText) || 
-                    /^mailto:/i.test(valueText);
-
-                const valueHtml = isLink
-                    ? `<a href="${valueText}" target="_blank" rel="noopener noreferrer" draggable="false" class="${linkColor} text-sm font-semibold mt-0.5 break-all inline-block cursor-pointer">${valueText}</a>`
-                    : `<p class="text-sm font-semibold text-gray-400/70 dark:text-gray-500 mt-0.5 break-all">${valueText}</p>`;
-
                 const cardDiv = document.createElement('div');
-                cardDiv.className = "flex items-center gap-4 select-none py-1";
-                cardDiv.innerHTML = `
-                    <div class="w-11 h-11 rounded-2xl ${iconColor} flex items-center justify-center shrink-0 shadow-sm">
-                        <i class="${iconFullClass} text-lg"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200 tracking-wide">${titleText}</h4>
-                        ${valueHtml}
-                    </div>
-                `;
+                cardDiv.className = 'flex items-center gap-4 select-none py-1';
+
+                const iconBox = document.createElement('div');
+                iconBox.className = `w-11 h-11 rounded-2xl ${ICON_COLOR_MAP[card.color] || ICON_COLOR_MAP.blue} flex items-center justify-center shrink-0 shadow-sm`;
+                appendIcon(iconBox, card.iconClass || card.icon);
+
+                const textBox = document.createElement('div');
+                const title = document.createElement('h4');
+                title.className = 'text-sm font-bold text-gray-800 dark:text-gray-200 tracking-wide';
+                title.textContent = safeLocalizedText(card.title);
+
+                const value = typeof card.value === 'string' ? card.value.trim() : '';
+                let valueElement;
+
+                try {
+                    const valueUrl = new URL(value);
+                    if (!['http:', 'https:', 'mailto:'].includes(valueUrl.protocol)) throw new Error('Unsupported protocol');
+
+                    valueElement = document.createElement('a');
+                    valueElement.href = valueUrl.href;
+                    valueElement.target = '_blank';
+                    valueElement.rel = 'noopener noreferrer';
+                    valueElement.draggable = false;
+                    valueElement.className = `${linkColor} text-sm font-semibold mt-0.5 break-all inline-block cursor-pointer`;
+                    valueElement.textContent = value;
+                } catch (error) {
+                    valueElement = document.createElement('p');
+                    valueElement.className = 'text-sm font-semibold text-gray-400/70 dark:text-gray-500 mt-0.5 break-all';
+                    valueElement.textContent = value || (isZH ? '暂无' : 'N/A');
+                }
+
+                textBox.append(title, valueElement);
+                cardDiv.append(iconBox, textBox);
                 infoContainer.appendChild(cardDiv);
             });
         }
 
+        async function loadJson(path, fallback = null) {
+            const response = await fetch(`${path}?t=${Date.now()}`, { cache: 'no-store' });
+            if (!response.ok) throw new Error(`${path} returned HTTP ${response.status}`);
+            return response.json().catch(() => fallback);
+        }
+
         async function loadModularJSONs() {
-            const bust = Date.now();
             try {
-                const [cfgRes, routeRes, themeRes, langRes, annRes] = await Promise.all([
-                    fetch(`./data/config.json?t=${bust}`).then(r => { if(!r.ok) throw new Error(); return r.json(); }).catch(() => null),
-                    fetch(`./data/routes.json?t=${bust}`).then(r => { if(!r.ok) throw new Error(); return r.json(); }).catch(() => null),
-                    fetch(`./data/theme.json?t=${bust}`).then(r => r.json()).catch(() => ({})),
-                    fetch(`./data/language.json?t=${bust}`).then(r => r.json()).catch(() => ({})),
-                    fetch(`./data/announcement.json?t=${bust}`).then(r => r.json()).catch(() => ({}))
+                const [configData, routeData, themeData, languageData, announcementData] = await Promise.all([
+                    loadJson('./data/config.json'),
+                    loadJson('./data/routes.json'),
+                    loadJson('./data/theme.json', {}).catch(() => ({})),
+                    loadJson('./data/language.json', {}).catch(() => ({})),
+                    loadJson('./data/announcement.json', {}).catch(() => ({}))
                 ]);
 
-                if (!cfgRes || !routeRes || routeRes.length === 0) {
-                    document.getElementById('status-hint').innerText = isZH ? "配置读取失败，请检查 /data 目录" : "Data missing. Check /data folder.";
-                    return false; 
+                APP_CONFIG = validateConfig(configData);
+                APP_THEME = themeData && typeof themeData === 'object' ? themeData : {};
+                domains = validateRoutes(routeData, APP_CONFIG.speedTest.protocolMode);
+
+                if (domains.length === 0) {
+                    throw new Error('No valid routes were found in routes.json.');
                 }
 
-                APP_CONFIG = cfgRes;
-                domains = [...new Set(routeRes)].map(d => d.trim());
-                APP_THEME = themeRes;
-                
-                const langDict = langRes[langKey] || {};
-                const annDict = annRes[langKey] || {};
-                i18n = { ...langDict, ...annDict };
+                const langDict = languageData && languageData[langKey] && typeof languageData[langKey] === 'object'
+                    ? languageData[langKey]
+                    : {};
+                const announcementDict = announcementData && announcementData[langKey] && typeof announcementData[langKey] === 'object'
+                    ? announcementData[langKey]
+                    : {};
+                i18n = { ...langDict, ...announcementDict };
 
-                if (APP_THEME.cardGradient) document.getElementById('default-line-card').className = `bg-gradient-to-br ${APP_THEME.cardGradient} rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-purple-600/20 dark:shadow-none flex flex-col items-start border border-white/10 relative overflow-hidden transition-all duration-500`;
-                if (APP_THEME.btnColor) defaultEntryBtn.className = `w-full ${APP_THEME.btnColor} py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2`;
+                if (typeof APP_THEME.cardGradient === 'string' && APP_THEME.cardGradient.trim()) {
+                    document.getElementById('default-line-card').className = `bg-gradient-to-br ${APP_THEME.cardGradient} rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-purple-600/20 dark:shadow-none flex flex-col items-start border border-white/10 relative overflow-hidden transition-all duration-500`;
+                }
+                if (typeof APP_THEME.btnColor === 'string' && APP_THEME.btnColor.trim()) {
+                    defaultEntryBtn.className = `w-full ${APP_THEME.btnColor} py-3.5 px-6 rounded-2xl font-bold text-center text-base shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 pointer-events-none opacity-80`;
+                }
 
-                document.title = APP_CONFIG.title || "Beacon";
-                document.getElementById('i18n-sub-bold').innerHTML = i18n.subBold || "智能线路优选";
-                document.getElementById('i18n-sub-text').innerText = i18n.subText || "就绪";
-                document.getElementById('i18n-btn-enter').innerText = i18n.enterBtn || "立即进入";
-                document.getElementById('i18n-list-title').innerText = i18n.listTitle || "全部线路";
-                document.getElementById('i18n-btn-retest').innerText = i18n.retestBtn || "重新测速";
-                document.getElementById('i18n-tip-box').innerHTML = i18n.tipBox || "";
-                document.getElementById('i18n-tip-desc').innerText = i18n.tipDesc || "";
-                document.getElementById('i18n-tip-legal').innerText = i18n.tipLegal || "";
+                document.title = APP_CONFIG.title;
+                document.getElementById('i18n-sub-bold').textContent = i18n.subBold || '智能线路优选';
+                document.getElementById('i18n-sub-text').textContent = i18n.subText || '就绪';
+                document.getElementById('i18n-btn-enter').textContent = i18n.enterBtn || '立即进入';
+                document.getElementById('i18n-list-title').textContent = i18n.listTitle || '全部线路';
+                document.getElementById('i18n-btn-retest').textContent = i18n.retestBtn || '重新测速';
+
+                const tipBox = document.getElementById('i18n-tip-box');
+                tipBox.replaceChildren(sanitizeLimitedHtml(i18n.tipBox || ''));
+                document.getElementById('i18n-tip-desc').textContent = i18n.tipDesc || '';
+                document.getElementById('i18n-tip-legal').textContent = i18n.tipLegal || '';
 
                 renderInfoCards();
-
-                defaultEntryBtn.classList.remove('pointer-events-none', 'opacity-80');
                 retestBtn.classList.remove('pointer-events-none', 'opacity-50');
 
-                updateTopCardDomain(APP_CONFIG.defaultDomain || domains[0]);
-                
-                const speedConfig = APP_CONFIG.speedTest || {};
+                const initialDomain = domains.includes(APP_CONFIG.defaultDomain)
+                    ? APP_CONFIG.defaultDomain
+                    : domains[0];
+                updateTopCardDomain(initialDomain);
+                setEntryEnabled(false);
+
+                const speedConfig = APP_CONFIG.speedTest;
                 testerEngine = new BeaconEngine({
-                    timeoutMs: Number(speedConfig.timeout) || Number(APP_CONFIG.timeoutMs) || 5000,
-                    concurrency: Number(speedConfig.concurrency) || Number(APP_CONFIG.concurrency) || 3,
-                    pingCount: Number(speedConfig.sample) || 3,
+                    timeoutMs: speedConfig.timeout,
+                    concurrency: speedConfig.concurrency,
+                    pingCount: speedConfig.sample,
                     protocolMode: speedConfig.protocolMode,
                     probeMode: speedConfig.probeMode,
                     capabilityTtl: speedConfig.capabilityTtl,
@@ -282,217 +422,256 @@
                     timeoutPenalty: speedConfig.timeoutPenalty
                 });
 
-                return true; 
-            } catch (err) {
-                console.error("Config load failed:", err);
-                document.getElementById('status-hint').innerText = "核心配置发生异常错误";
+                return true;
+            } catch (error) {
+                console.error('Config load failed:', error);
+                cardStatusText.textContent = isZH ? '配置加载失败' : 'Configuration failed';
+                statusHintEl.textContent = isZH
+                    ? '配置读取失败，请检查 data 目录和 JSON 格式'
+                    : 'Failed to load configuration. Check the data folder and JSON syntax.';
+                setEntryEnabled(false);
                 return false;
             }
         }
 
-        function getListFontSizeClass(domain, isAvail) {
-            const baseWeight = isAvail ? "font-semibold text-gray-800 dark:text-gray-100" : "font-medium text-gray-400/80 dark:text-gray-500";
+        function getListFontSizeClass(domain, available) {
+            const baseWeight = available
+                ? 'font-semibold text-gray-800 dark:text-gray-100'
+                : 'font-medium text-gray-400/80 dark:text-gray-500';
             if (domain.length >= 17) return `${baseWeight} text-[11px] sm:text-xs tracking-tighter whitespace-nowrap transition-all duration-300`;
             if (domain.length >= 15) return `${baseWeight} text-xs sm:text-sm tracking-tight whitespace-nowrap transition-all duration-300`;
             return `${baseWeight} text-sm sm:text-base truncate transition-all duration-300`;
         }
 
         function updateTopCardDomain(domain) {
-            const cleanDomain = domain.replace(/^https?:\/\//, '').replace(/\/+$/, '');
-            defaultDomainEl.innerText = cleanDomain;
-            if (cleanDomain.length >= 18) defaultDomainEl.className = "font-bold text-lg sm:text-xl tracking-tighter mb-2 w-full truncate transition-all duration-300";
-            else if (cleanDomain.length >= 16) defaultDomainEl.className = "font-bold text-xl sm:text-2xl tracking-tight mb-2 w-full truncate transition-all duration-300";
-            else defaultDomainEl.className = "font-bold text-2xl sm:text-3xl tracking-wide mb-2 w-full truncate transition-all duration-300";
+            let displayDomain = String(domain || '');
+            try {
+                const target = testerEngine ? testerEngine.getTargetUrl(displayDomain) : new URL(/^https?:\/\//i.test(displayDomain) ? displayDomain : `https://${displayDomain}`).href;
+                const url = new URL(target);
+                displayDomain = `${url.host}${url.pathname === '/' ? '' : url.pathname}`.replace(/\/$/, '');
+            } catch (error) {
+                displayDomain = displayDomain.replace(/^https?:\/\//i, '').replace(/\/+$/, '');
+            }
+
+            defaultDomainEl.textContent = displayDomain;
+            if (displayDomain.length >= 18) defaultDomainEl.className = 'font-bold text-lg sm:text-xl tracking-tighter mb-2 w-full truncate transition-all duration-300';
+            else if (displayDomain.length >= 16) defaultDomainEl.className = 'font-bold text-xl sm:text-2xl tracking-tight mb-2 w-full truncate transition-all duration-300';
+            else defaultDomainEl.className = 'font-bold text-2xl sm:text-3xl tracking-wide mb-2 w-full truncate transition-all duration-300';
         }
 
         function initListUI() {
             if (container.children.length !== domains.length) {
-                container.innerHTML = '';
+                container.replaceChildren();
                 testResults = [];
                 container.style.height = `${domains.length * ROW_HEIGHT}px`;
-                
-                domains.forEach((domain, index) => {
-                    testResults.push({ domain, ms: undefined, [_v]: undefined, index, lastRank: index });
-                    
-                    const div = document.createElement('div');
-                    div.id = `line-row-${index}`;
-                    // 🌟 彻底清除了列表项上的边框变色与阴影悬停 hover
-                    div.className = "absolute left-0 right-0 h-[48px] flex items-center justify-between px-2 sm:px-3 rounded-xl bg-white dark:bg-gray-800/90 border border-gray-100/40 dark:border-gray-700/50 cursor-pointer opacity-100 gpu-slide";
-                    div.style.transform = `translateY(${index * ROW_HEIGHT}px)`;
 
-                    const fontClass = getListFontSizeClass(domain, true);
-                    div.innerHTML = `
-                        <div class="flex items-center gap-2.5 overflow-hidden">
-                            <div id="badge-${index}" class="w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 text-xs font-bold flex items-center justify-center shrink-0 transition-all duration-300">-</div>
-                            <span id="domain-text-${index}" class="${fontClass}">${domain}</span>
-                        </div>
-                        <div id="pill-${index}" class="bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500">
-                            ${i18n.pillTesting || "● 采集中..."}
-                        </div>
-                    `;
-                    container.appendChild(div);
+                domains.forEach((domain, index) => {
+                    testResults.push({ domain, ms: undefined, [SCORE]: undefined, index, lastRank: index });
+
+                    const row = document.createElement('div');
+                    row.id = `line-row-${index}`;
+                    row.className = 'absolute left-0 right-0 h-[48px] flex items-center justify-between px-2 sm:px-3 rounded-xl bg-white dark:bg-gray-800/90 border border-gray-100/40 dark:border-gray-700/50 cursor-pointer opacity-100 gpu-slide';
+                    row.style.transform = `translateY(${index * ROW_HEIGHT}px)`;
+
+                    const left = document.createElement('div');
+                    left.className = 'flex items-center gap-2.5 overflow-hidden';
+
+                    const badge = document.createElement('div');
+                    badge.id = `badge-${index}`;
+                    badge.className = 'w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 text-xs font-bold flex items-center justify-center shrink-0 transition-all duration-300';
+                    badge.textContent = '-';
+
+                    const domainText = document.createElement('span');
+                    domainText.id = `domain-text-${index}`;
+                    domainText.className = getListFontSizeClass(domain, true);
+                    domainText.textContent = domain;
+
+                    const pill = document.createElement('div');
+                    pill.id = `pill-${index}`;
+                    pill.className = 'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500 animate-pulse';
+                    pill.textContent = i18n.pillTesting || '● 采集中...';
+
+                    left.append(badge, domainText);
+                    row.append(left, pill);
+                    container.appendChild(row);
                 });
             } else {
-                testResults.forEach((item) => {
-                    item.ms = undefined; 
-                    item[_v] = undefined;
-                    const badgeEl = document.getElementById(`badge-${item.index}`);
-                    const pillEl = document.getElementById(`pill-${item.index}`);
-                    const domainEl = document.getElementById(`domain-text-${item.index}`);
-                    
-                    if (badgeEl) {
-                        badgeEl.className = "w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 text-xs font-bold flex items-center justify-center shrink-0 transition-all duration-300";
-                        badgeEl.innerText = "-";
+                testResults.forEach(item => {
+                    item.ms = undefined;
+                    item[SCORE] = undefined;
+
+                    const badge = document.getElementById(`badge-${item.index}`);
+                    const pill = document.getElementById(`pill-${item.index}`);
+                    const domainText = document.getElementById(`domain-text-${item.index}`);
+                    const row = document.getElementById(`line-row-${item.index}`);
+
+                    if (badge) {
+                        badge.className = 'w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 text-xs font-bold flex items-center justify-center shrink-0 transition-all duration-300';
+                        badge.textContent = '-';
                     }
-                    if (pillEl) {
-                        pillEl.className = "bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500 animate-pulse";
-                        pillEl.innerHTML = i18n.pillTesting || "● 采集中...";
+                    if (pill) {
+                        pill.className = 'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-500 animate-pulse';
+                        pill.textContent = i18n.pillTesting || '● 采集中...';
                     }
-                    if (domainEl) {
-                        domainEl.className = getListFontSizeClass(item.domain, true);
+                    if (domainText) domainText.className = getListFontSizeClass(item.domain, true);
+                    if (row) {
+                        row.onclick = null;
+                        row.style.transform = `translateY(${item.index * ROW_HEIGHT}px)`;
                     }
                 });
             }
         }
 
         function updatePillContent(item) {
-            const isTesting = item.ms === undefined;
-            const isAvail = isAvailable(item.ms);
-            
-            const pillEl = document.getElementById(`pill-${item.index}`);
-            const domainEl = document.getElementById(`domain-text-${item.index}`);
-            if (!pillEl || !domainEl) return;
+            const testing = item.ms === undefined;
+            const available = isAvailable(item.ms);
+            const pill = document.getElementById(`pill-${item.index}`);
+            const domainText = document.getElementById(`domain-text-${item.index}`);
+            if (!pill || !domainText) return;
 
-            domainEl.className = getListFontSizeClass(item.domain, !isTesting && isAvail);
+            domainText.className = getListFontSizeClass(item.domain, !testing && available);
 
-            let pillClass = "", pillText = "";
-            if (isTesting) {
-                pillClass = "bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 animate-pulse";
-                pillText = i18n.pillTesting || "● 采集中...";
-            } else if (!isAvail) {
-                pillClass = "bg-rose-50 dark:bg-rose-950/50 text-rose-400/90 dark:text-rose-400";
-                pillText = i18n.pillOffline || "● 暂不可用";
+            let pillClass;
+            let pillText;
+
+            if (testing) {
+                pillClass = 'bg-gray-100 dark:bg-gray-700/60 text-gray-400 dark:text-gray-400 animate-pulse';
+                pillText = i18n.pillTesting || '● 采集中...';
+            } else if (!available) {
+                pillClass = 'bg-rose-50 dark:bg-rose-950/50 text-rose-400/90 dark:text-rose-400';
+                pillText = i18n.pillOffline || '● 暂不可用';
             } else {
-                const defaultLevels = [
-                    { max: 100, label: { zh: "极速", en: "Fast" }, color: "emerald" },
-                    { max: 200, label: { zh: "流畅", en: "Good" }, color: "teal" },
-                    { max: 500, label: { zh: "一般", en: "Normal" }, color: "amber" },
-                    { max: 1000, label: { zh: "卡顿", en: "Laggy" }, color: "orange" },
-                    { max: 999999, label: { zh: "很差", en: "Poor" }, color: "rose" }
-                ];
-                const levels = APP_CONFIG.latencyLevels || defaultLevels;
-
-                let matched = levels[levels.length - 1];
-                for (let i = 0; i < levels.length; i++) {
-                    if (item.ms <= levels[i].max) {
-                        matched = levels[i];
-                        break;
-                    }
-                }
-
+                const levels = APP_CONFIG.latencyLevels;
+                const matched = levels.find(level => item.ms <= level.max) || levels[levels.length - 1];
                 pillClass = PILL_COLOR_MAP[matched.color] || PILL_COLOR_MAP.gray;
-                const labelStr = matched.label ? (matched.label[langKey] || matched.label.zh || "") : "";
-                pillText = `● ${labelStr} ${item.ms}ms`;
+                pillText = `● ${safeLocalizedText(matched.label)} ${item.ms}ms`;
             }
 
-            pillEl.className = `${pillClass} px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-300`;
-            pillEl.innerHTML = pillText;
+            pill.className = `${pillClass} px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold flex items-center gap-1 shrink-0 tracking-wide shadow-sm transition-all duration-300`;
+            pill.textContent = pillText;
         }
 
         function finalSortAndRender() {
             const sorted = [...testResults].sort((a, b) => {
-                const valA = a[_v] ?? Number.MAX_SAFE_INTEGER;
-                const valB = b[_v] ?? Number.MAX_SAFE_INTEGER;
-                if (valA === valB) return a.lastRank - b.lastRank;
-                return valA - valB; 
+                const scoreA = a[SCORE] ?? UNAVAILABLE;
+                const scoreB = b[SCORE] ?? UNAVAILABLE;
+                return scoreA === scoreB ? a.lastRank - b.lastRank : scoreA - scoreB;
             });
-            
-            let rankCounter = 1;
+
+            let rank = 1;
 
             sorted.forEach((item, sortedIndex) => {
                 item.lastRank = sortedIndex;
-                const rowEl = document.getElementById('line-row-' + item.index);
-                const badgeEl = document.getElementById('badge-' + item.index);
-                if (!rowEl || !badgeEl) return;
+                const row = document.getElementById(`line-row-${item.index}`);
+                const badge = document.getElementById(`badge-${item.index}`);
+                if (!row || !badge) return;
 
-                rowEl.style.transform = `translateY(${sortedIndex * ROW_HEIGHT}px)`;
+                row.style.transform = `translateY(${sortedIndex * ROW_HEIGHT}px)`;
+                const available = isAvailable(item.ms);
 
-                const isAvail = isAvailable(item.ms);
-                if (isAvail) {
-                    badgeEl.className = "w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 text-xs font-extrabold flex items-center justify-center shrink-0 transition-all duration-300";
-                    badgeEl.innerText = rankCounter++;
+                if (available) {
+                    badge.className = 'w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 text-xs font-extrabold flex items-center justify-center shrink-0 transition-all duration-300';
+                    badge.textContent = String(rank++);
                 } else {
-                    badgeEl.className = "w-8 h-8 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-300 dark:text-gray-600 text-xs font-extrabold flex items-center justify-center shrink-0 transition-all duration-300";
-                    badgeEl.innerText = "-";
+                    badge.className = 'w-8 h-8 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-300 dark:text-gray-600 text-xs font-extrabold flex items-center justify-center shrink-0 transition-all duration-300';
+                    badge.textContent = '-';
                 }
 
-                rowEl.onclick = () => {
+                row.onclick = () => {
                     if (item.ms === undefined) return;
-                    if (!isAvail) {
-                        alert(i18n.alertOffline || "❌ 该线路暂不可用");
+                    if (!available) {
+                        alert(i18n.alertOffline || '❌ 该线路暂不可用');
                         return;
                     }
-                    const linkUrl = testerEngine.getTargetUrl(item.domain);
-                    window.open(linkUrl, '_blank');
+
+                    const popup = window.open(testerEngine.getTargetUrl(item.domain), '_blank', 'noopener,noreferrer');
+                    if (popup) popup.opener = null;
                 };
             });
         }
 
         async function startSpeedTest() {
-            if (!testerEngine) return;
+            if (!testerEngine || isTesting) return;
+            isTesting = true;
+            testerEngine.cancelCurrentRun();
+
             retestBtn.disabled = true;
+            retestBtn.classList.add('opacity-50', 'pointer-events-none');
             retestIcon.classList.add('animate-spin');
-            
+            setEntryEnabled(false);
             initListUI();
-            
-            document.getElementById('i18n-sub-text').innerText = i18n.subText || "动态路由测速中...";
-            cardStatusText.innerText = i18n.statusTesting || "AI 路由评估与多重防抖中...";
-            statusHintEl.innerText = i18n.hintLoading || "环境采集与历史建模...";
+
+            document.getElementById('i18n-sub-text').textContent = i18n.subText || '动态路由测速中...';
+            cardStatusText.textContent = i18n.statusTesting || '正在检测线路延迟...';
+            statusHintEl.textContent = i18n.hintLoading || '正在获取测速结果...';
 
             let availableCount = 0;
 
             const onProgress = (index, currentMedian) => {
                 const domain = domains[index];
-                testResults[index].ms = currentMedian; 
-                testResults[index][_v] = testerEngine.getScore(domain, currentMedian);
-                
-                if (isAvailable(currentMedian)) availableCount++;
-                
+                testResults[index].ms = currentMedian;
+                testResults[index][SCORE] = testerEngine.getScore(domain, currentMedian);
+                if (isAvailable(currentMedian)) availableCount += 1;
                 updatePillContent(testResults[index]);
             };
 
-            await testerEngine.runPool(domains, onProgress);
-            
-            finalSortAndRender();
-            
-            const validNodes = testResults.filter(r => isAvailable(r.ms) && r[_v] !== undefined);
-            if (validNodes.length > 0) {
-                validNodes.sort((a, b) => a[_v] - b[_v]);
-                const bestNode = validNodes[0];
-                updateTopCardDomain(bestNode.domain);
-                defaultEntryBtn.href = testerEngine.getTargetUrl(bestNode.domain);
-            }
+            try {
+                await testerEngine.runPool(domains, onProgress);
+                finalSortAndRender();
 
-            document.getElementById('i18n-sub-text').innerText = i18n.statusDone || "已调度至最佳链路";
-            cardStatusText.innerText = i18n.statusFound || "已为您智能调度至长期最佳线路";
-            statusHintEl.innerText = isZH ? `共 ${availableCount}/${domains.length} 条可用网络` : `${availableCount}/${domains.length} Networks Available`;
-            
-            retestBtn.disabled = false;
-            retestIcon.classList.remove('animate-spin');
+                const validNodes = testResults
+                    .filter(result => isAvailable(result.ms) && Number.isFinite(result[SCORE]))
+                    .sort((a, b) => a[SCORE] - b[SCORE]);
+
+                if (validNodes.length > 0) {
+                    const bestNode = validNodes[0];
+                    updateTopCardDomain(bestNode.domain);
+                    setEntryEnabled(true, testerEngine.getTargetUrl(bestNode.domain));
+                    document.getElementById('i18n-sub-text').textContent = i18n.statusDone || '最佳线路已就绪';
+                    cardStatusText.textContent = i18n.statusFound || '已选择当前最优线路';
+                    statusHintEl.textContent = isZH
+                        ? `共 ${availableCount}/${domains.length} 条可用网络`
+                        : `${availableCount}/${domains.length} networks available`;
+                } else {
+                    setEntryEnabled(false);
+                    defaultDomainEl.textContent = isZH ? '暂无可用线路' : 'No route available';
+                    document.getElementById('i18n-sub-text').textContent = isZH ? '测速完成' : 'Test completed';
+                    cardStatusText.textContent = isZH ? '未找到可用线路' : 'No available route';
+                    statusHintEl.textContent = isZH
+                        ? '所有线路均未通过当前浏览器的网络探测，请稍后重试'
+                        : 'All routes failed the current browser probe. Please retry later.';
+                }
+            } catch (error) {
+                console.error('Speed test failed:', error);
+                setEntryEnabled(false);
+                cardStatusText.textContent = isZH ? '测速发生错误' : 'Speed test failed';
+                statusHintEl.textContent = isZH ? '请重新测速或检查浏览器控制台' : 'Please retry or inspect the browser console.';
+            } finally {
+                isTesting = false;
+                retestBtn.disabled = false;
+                retestBtn.classList.remove('opacity-50', 'pointer-events-none');
+                retestIcon.classList.remove('animate-spin');
+            }
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
             if (typeof BeaconEngine === 'undefined') {
-                document.getElementById('status-hint').innerText = isZH ? "Engine 缺失 (engine.js 未加载)" : "Engine.js missing.";
+                statusHintEl.textContent = isZH ? 'Engine 缺失（engine.js 未加载）' : 'engine.js is missing.';
                 return;
             }
-            
-            const isReady = await loadModularJSONs();
-            if (isReady) {
-                startSpeedTest();
-            }
+
+            const ready = await loadModularJSONs();
+            if (ready) startSpeedTest();
         });
-        
+
+        window.addEventListener('pagehide', () => {
+            if (testerEngine) testerEngine.destroy();
+        });
+
+        defaultEntryBtn.addEventListener('click', event => {
+            if (defaultEntryBtn.getAttribute('aria-disabled') === 'true') event.preventDefault();
+        });
+
         retestBtn.addEventListener('click', startSpeedTest);
     </script>
 </body>
